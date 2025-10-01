@@ -7,11 +7,10 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-
+.env-backup
 
 # Editor/IDE
 .vscode/
 .idea/
 .DS_Store
 node_modules
-.env
