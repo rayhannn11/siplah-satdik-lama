@@ -1,0 +1,115 @@
+// colors
+$light-opposite-color: #3d464d !default;
+// $accent-color: blue !default;
+$accent-color: #0e336d !default;
+$secondary-color: white !default;
+$accent-opposite-muted-color: #3d464d !default;
+$accent-opposite-color: #3d464d !default;
+$link-color: $accent-color !default;
+$link-hover-color: $accent-color !default;
+$gradient-color: linear-gradient(270deg, rgb(0, 183, 240) 30%, rgb(0, 130, 186) 100%) !default;
+
+// header
+$header-type: colored !default;
+$header-bg: $secondary-color !default;
+$header-font-color: $accent-opposite-color !default;
+$header-font-muted-color: $accent-opposite-muted-color !default;
+$header-logo-color: inherit !default;
+
+// .topbar
+$topbar-height: 50px !default;
+$topbar-bg: $gradient-color !default;
+$topbar-border-bottom: none !default;
+$topbar-font-color: #737373 !default;
+$topbar-link-hover-color: $accent-opposite-color !default;
+$topbar-dropdown-value-color: $accent-opposite-color !default;
+$topbar-dropdown-arrow-color: rgba(#fff, 0.4) !default;
+$topbar-dropdown-hover-bg: rgba(#fff, 0.15) !default;
+$topbar-dropdown-hover-font-color: $accent-opposite-color !default;
+$topbar-dropdown-hover-value-color: $accent-opposite-color !default;
+$topbar-dropdown-hover-arrow-color: $topbar-dropdown-arrow-color !default;
+
+// .search--location--header
+$header-search-height: 40px !default;
+$header-search-border-radius: 2px !default;
+// input default
+$header-search-input-default-bg: #fff !default;
+$header-search-input-default-shadow: 0 1px 5px rgba(#0e336d, 0.2) !default;
+// $header-search-input-default-shadow: 0 1px 5px rgba(#0e336d, 0.2) !default;
+$header-search-input-default-font-color: $light-opposite-color !default;
+// input hover
+$header-search-input-default-icon-color: $secondary-color !default;
+$header-search-input-default-icon-hover-color: $secondary-color !default;
+$header-search-input-hover-bg: $header-search-input-default-bg !default;
+$header-search-input-hover-shadow: $header-search-input-default-shadow !default;
+// input hover
+$header-search-input-focus-bg: $header-search-input-default-bg !default;
+$header-search-input-focus-shadow: $header-search-input-default-shadow !default;
+
+// .nav-links
+$nav-links-item-font-weight: 400 !default;
+$nav-links-item-default-arrow-color: rgba(#000, 0.25) !default;
+$nav-links-item-hover-bg: rgba(#fff, 0.15) !default;
+
+// .departments
+// $departments-bg: #fff !default;
+// $departments-shadow: none;
+// $departments-icon-color: rgba(#000, 0.3) !default;
+// $departments-arrow-color: rgba(#000, 0.3) !default;
+// $departments-item-hover-bg: rgba(#000, 0.05) !default;
+// $departments-font-color: $light-opposite-color !default;
+
+// .mobile-header
+$mobile-header-menu-button-hover-bg: $nav-links-item-hover-bg !default;
+// menu button
+$mobile-header-menu-button-default-bg: transparent;
+$mobile-header-menu-button-default-color: $accent-opposite-color;
+
+// search input default
+$mobile-header-search-input-default-bg: rgba(#fff, 0.4) !default;
+$mobile-header-search-input-default-shadow: none !default;
+$mobile-header-search-input-default-placeholder: rgba(#000, 0.5) !default;
+$mobile-header-search-input-default-font-color: #fff !default;
+$mobile-header-search-input-default-icon-color: rgba(#000, 0.4) !default;
+$mobile-header-search-input-default-icon-hover-color: $light-opposite-color !default;
+// search input hover
+$mobile-header-search-input-hover-bg: rgba(#fff, 0.6) !default;
+// search input focus
+$mobile-header-search-input-focus-bg: #fff !default;
+$mobile-header-search-input-focus-shadow: 0 1px 5px rgba(#000, 0.2) !default;
+$mobile-header-search-input-focus-placeholder: #999 !default;
+$mobile-header-search-input-focus-font-color: $light-opposite-color !default;
+$mobile-header-search-input-focus-icon-color: #b3b3b3 !default;
+$mobile-header-search-input-focus-icon-hover-color: $light-opposite-color !default;
+
+// .product-card
+$product-card-hover-shadow: 0 0 0 2px #e5e5e5 inset !default;
+$product-card-quickview-default-bg: #e5e5e5 !default;
+$product-card-quickview-default-color: $light-opposite-color !default;
+
+// .nouislider
+$nouislider-border-color: $accent-color !default;
+$nouislider-handle-color: $accent-opposite-color !default;
+
+// nav panel
+$nav-panel-bg: #fff !default;
+$nav-panel-shadow: none;
+// $nav-panel-shadow: 0 1px rgba(#000, 0.04), inset 0 -1px rgba(#000, 0.04) !default;
+$nav-panel-stuck-shadow: 0 4px rgba(#000, 0.1), inset 0 -1px rgba(#000, 0.04),
+    0 1px 20px rgba(#000, 0.15) !default;
+$nav-panel-font-color: white !default;
+$nav-panel-logo-color: white !default;
+$nav-panel-top: 1px solid darken($accent-color, 5%) !default;
+$nav-panel-font-color-mobile: $accent-opposite-color !default;
+$nav-panel-logo-color-mobile: $accent-opposite-color !default;
+
+// btn primary
+$btn-primary-bg-color: $accent-color;
+$btn-primary-font-color: $secondary-color;
+$btn-primary-icon-color: $secondary-color;
+$btn-primary-hover-bg-color: $accent-color;
+$btn-primary-hover-font-color: $secondary-color;
+$btn-primary-hover-icon-color: $secondary-color;
+$btn-primary-active-bg-color: $accent-color;
+$btn-primary-active-font-color: $secondary-color;
+$btn-primary-active-icon-color: $secondary-color;

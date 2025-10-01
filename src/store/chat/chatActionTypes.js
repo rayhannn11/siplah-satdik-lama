@@ -1,0 +1,1 @@
+export const CHAT_ADD_LIST = 'CHAT_ADD_LIST'

@@ -1,0 +1,2 @@
+(this["webpackJsonpsiplah.eureka"]=this["webpackJsonpsiplah.eureka"]||[]).push([[40],{362:function(e,t,a){"use strict";a.r(t);var n=a(1),r=a.n(n),s=a(9);t.default=e=>{let{component:t,auth:a,...n}=e;return r.a.createElement(s.b,Object.assign({},n,{render:e=>a?r.a.createElement(t,e):r.a.createElement(s.a,{to:"/login"})}))}}}]);
+//# sourceMappingURL=40.6c3dbd88.chunk.js.map

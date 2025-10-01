@@ -1,0 +1,90 @@
+{
+  "name": "siplah.eureka",
+  "homepage": "https://siplah.eurekabookhouse.co.id/sandbox/",
+  "version": "2.4.0",
+  "private": true,
+  "dependencies": {
+    "@firebase/app": "^0.6.29",
+    "@firebase/database": "^0.10.9",
+    "@fortawesome/fontawesome-free": "5.13.1",
+    "bootstrap": "4.5.0",
+    "bootstrap-daterangepicker": "^3.1.0",
+    "classnames": "^2.2.6",
+    "google-map-react": "^2.1.9",
+    "node-sass": "4.14.1",
+    "photoswipe": "^4.1.3",
+    "prop-types": "^15.7.2",
+    "query-string": "^6.13.1",
+    "react": "16.13.1",
+    "react-bootstrap-daterangepicker": "^7.0.0",
+    "react-dom": "16.13.1",
+    "react-ga": "^3.3.0",
+    "react-helmet-async": "1.0.6",
+    "react-infinite-scroller": "^1.2.4",
+    "react-input-range": "^1.3.0",
+    "react-intl": "5.0.2",
+    "react-lazy-hydration": "^0.1.0",
+    "react-lazy-load-image-component": "^1.5.1",
+    "react-loading-skeleton": "^2.1.1",
+    "react-number-format": "^4.4.4",
+    "react-redux": "7.2.0",
+    "react-responsive": "^8.2.0",
+    "react-responsive-carousel": "^3.2.23",
+    "react-router-dom": "5.2.0",
+    "react-router-scroll-4": "^1.0.0-beta.2",
+    "react-scripts": "3.4.1",
+    "react-select": "^4.0.2",
+    "react-slick": "0.26.1",
+    "react-toastify": "6.0.8",
+    "react-transition-group": "^4.4.1",
+    "react-vertical-timeline-component": "^3.3.3",
+    "react-window": "^1.8.6",
+    "reactstrap": "8.5.1",
+    "redux": "4.0.5",
+    "redux-persist": "^6.0.0",
+    "redux-persist-transform-encrypt": "^3.0.1",
+    "redux-thunk": "^2.3.0",
+    "siplah.eureka": "file:",
+    "slick-carousel": "^1.8.1",
+    "sweetalert2": "^10.16.11",
+    "typeface-roboto": "^1.1.13",
+    "use-query-params": "^1.1.9",
+    "webp-converter": "^2.3.3",
+    "xlsx": "^0.18.5"
+  },
+  "scripts": {
+    "dev": "npm run start",
+    "start": "react-scripts start",
+    "build": "node update-version.js && react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "update-version": "node update-version.js"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version",
+      "last 1 edge version"
+    ]
+  },
+  "devDependencies": {
+    "@babel/core": "^7.26.8",
+    "@babel/preset-env": "^7.26.8",
+    "@babel/preset-react": "^7.26.3",
+    "eslint-config-airbnb": "18.2.0",
+    "eslint-plugin-import": "2.22.0",
+    "eslint-plugin-jsx-a11y": "6.3.1",
+    "eslint-plugin-no-unsanitized": "^3.1.5",
+    "eslint-plugin-react": "7.20.3",
+    "resolve-url-loader": "^4.0.0"
+  }
+}

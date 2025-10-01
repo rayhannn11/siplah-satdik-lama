@@ -1,0 +1,40 @@
+/*
+// .block-brands
+*/
+@import '../variables';
+@import '../functions';
+@import '../mixins/card';
+
+
+.block-brands {}
+.block-brands__slider {
+    @include card();
+    background-color: rgb(255,98,33);
+    border: none;
+    box-shadow: 10px 10px 10px -10px rgba(0,0,0,.5);
+    border-radius: 20px;
+    padding-bottom: 8px;
+    padding-top: 8px;
+
+    .slick-slide > div > div {
+        vertical-align: middle;
+
+        &:focus {
+            outline: none;
+        }
+    }
+}
+.block-brands__item {
+    padding: 15px;
+
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+}
+
+@media (max-width: breakpoint(sm-end)) {
+    .block-brands__item {
+        padding: 20px 24px;
+    }
+}

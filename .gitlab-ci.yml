@@ -1,0 +1,74 @@
+stages:
+    - build
+    - deploy
+
+variables:
+    # Menggunakan variabel CI/CD yang sudah dibuat
+    SSH_HOST: $HOST
+    SSH_PORT: $PORT
+    SSH_USER: $USERNAME
+    SSH_PRIVATE_KEY: $PRIVATE_KEY
+
+    # Path konfigurasi - Deploy langsung ke sandbox
+    DEPLOY_PATH: "/home/siplah/sites/siplah.eurekabookhouse.co.id/sandbox"
+
+    # Node version
+    NODE_VERSION: "14"
+
+    # Build configuration - Skip ESLint warnings in CI
+    CI: "false"
+    GENERATE_SOURCEMAP: "false"
+
+# Stage 1: Build aplikasi
+build-application:
+    stage: build
+    image: node:14-alpine
+    cache:
+        paths:
+            - node_modules/
+        key: "$CI_COMMIT_REF_SLUG"
+    before_script:
+        - echo "🚀 Starting build process with Node.js $NODE_VERSION"
+        - node --version
+        - npm --version
+    script:
+        - npm ci
+        - echo "🔨 Building application..."
+        - npm run build
+        - echo "✅ Verifying build output..."
+        - ls -la build/
+        - echo "Build completed successfully!"
+    artifacts:
+        paths:
+            - build/
+        expire_in: 1 hour
+    only:
+        - main
+
+# Stage 2: Deploy static files
+deploy-static-files:
+    stage: deploy
+    image: node:14-alpine
+    dependencies:
+        - build-application
+    before_script:
+        - apk add --no-cache openssh-client rsync
+        - echo "🚀 Starting static file deployment"
+        - echo "📂 Deploy path - $DEPLOY_PATH"
+        - mkdir -p ~/.ssh
+        - echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+        - chmod 600 ~/.ssh/id_rsa
+        - ssh-keyscan -H -p $SSH_PORT $SSH_HOST >> ~/.ssh/known_hosts
+    script:
+        - echo "🗑️ Clearing existing files from deploy directory..."
+        - ssh -p $SSH_PORT $SSH_USER@$SSH_HOST "rm -rf '$DEPLOY_PATH'/*"
+        - echo "📤 Uploading new build files to server..."
+        - rsync -avz --delete -e "ssh -p $SSH_PORT" ./build/ $SSH_USER@$SSH_HOST:"$DEPLOY_PATH/"
+        - echo "✅ Verifying deployment..."
+        - ssh -p $SSH_PORT $SSH_USER@$SSH_HOST "ls -la '$DEPLOY_PATH/'"
+        - echo "🎉 Static file deployment completed successfully!"
+        - echo "🌐 Application is now live at $DEPLOY_PATH"
+    after_script:
+        - rm -f ~/.ssh/id_rsa
+    only:
+        - main

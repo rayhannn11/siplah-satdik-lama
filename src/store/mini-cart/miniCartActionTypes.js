@@ -1,0 +1,2 @@
+export const MINI_CART_ADD_ITEM = "MINI_CART_ADD_ITEM";
+export const MINI_CART_RESET = "MINI_CART_RESET";

@@ -1,0 +1,13 @@
+/*
+// .block-banner
+*/
+@import "../variables";
+@import "../mixins/preloader";
+
+.block-loader {
+    position: relative;
+    min-height: 320px;
+}
+.block-loader__spinner {
+    @include preloader(80px, 2px, rgba(#000, 0.1), rgba(#000, 0.5));
+}
