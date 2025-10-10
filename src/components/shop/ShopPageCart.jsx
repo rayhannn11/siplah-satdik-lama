@@ -173,16 +173,16 @@ const ShopPageCart = (props) => {
     };
 
     const doHandleCheckout = (cart) => {
-        if (cart.product.length > 25) {
-            return Swal.fire({
-                icon: "info",
-                title: "Jumlah Baris Produk Melebihi Batas",
-                showCancelButton: false,
-                html: `
-      Maksimal <b>25 produk</b> dalam satu kali transaksi. Silakan kurangi jumlah item di keranjang Anda agar dapat melanjutkan ke proses checkout.
-    `,
-            });
-        }
+    //     if (cart.product.length > 25) {
+    //         return Swal.fire({
+    //             icon: "info",
+    //             title: "Jumlah Baris Produk Melebihi Batas",
+    //             showCancelButton: false,
+    //             html: `
+    //   Maksimal <b>25 produk</b> dalam satu kali transaksi. Silakan kurangi jumlah item di keranjang Anda agar dapat melanjutkan ke proses checkout.
+    // `,
+    //         });
+    //     }
         if (process.env.REACT_APP_IS_MAINTENANCE === "true") {
             return Swal.fire({
                 icon: "info",
