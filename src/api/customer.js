@@ -1,5 +1,6 @@
 import qs from "query-string";
 import Swal from "sweetalert2";
+import api from "../services/axios";
 
 const customerApi = {
     login: (req) => {
@@ -12,6 +13,8 @@ const customerApi = {
     getOauth: () => {
         return fetch(`${process.env.REACT_APP_URL_SIPLAH}user/oauth`).then((res) => res.json());
     },
+    // getOauth: () => api.get("/user/oauth"),
+
     getCustomer: (token) => {
         return fetch(`${process.env.REACT_APP_URL_SIPLAH}user/profile/customer`, {
             headers: { Authorization: token },
@@ -131,8 +134,7 @@ const customerApi = {
             })
             .catch((error) => {
                 console.error("Error fetching cart list:", error);
-                Swal.fire("mengalami error di cart");
-                throw error;
+                throw error; // biar action yang handle
             });
     },
 

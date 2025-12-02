@@ -1,7 +1,10 @@
 import { toast } from "react-toastify";
 import customerApi from "../../api/customer";
 import { FETCH_CART_LIST, FETCH_CART_LIST_SUCCESS, SET_OPTION_VALUE } from "../../data/constant";
-import { addMiniCart } from "../mini-cart";
+import { addMiniCart, resetMiniCart } from "../mini-cart";
+import { resetFirstLogin } from "../../store/first-login/firstLoginActions";
+import { logoutCustomer } from "../../store/auth/authActions";
+import Swal from "sweetalert2";
 
 export function cartListFetch() {
     return {
@@ -9,11 +12,42 @@ export function cartListFetch() {
     };
 }
 
-export function cartListFetchSuccess(options, token) {
-    return (dispatch) =>
-        customerApi.getCartList(options, token).then((res) => {
-            dispatch(cartAddList(res.data));
-        });
+// export function cartListFetchSuccess(options, token) {
+//     return (dispatch) =>
+//         customerApi.getCartList(options, token).then((res) => {
+//             dispatch(cartAddList(res.data));
+//         });
+// }
+
+export function cartListFetchSuccess(options, token, props) {
+    return (dispatch) => {
+        return customerApi
+            .getCartList(options, token)
+            .then((res) => {
+                dispatch(cartAddList(res.data));
+            })
+            .catch((error) => {
+                console.error("Error in cartListFetchSuccess:", error);
+
+                // Swal untuk info user
+                Swal.fire({
+                    icon: "error",
+                    title: "Terjadi kesalahan",
+                    text: "Sesi pengguna sudah habis. Silahkan login kembali.",
+                }).then(() => {
+                    localStorage.removeItem("auth");
+                    localStorage.removeItem("token");
+                    localStorage.removeItem("userData");
+                    localStorage.removeItem("persist:primary");
+                    localStorage.removeItem("notifShown");
+                    localStorage.clear();
+                    dispatch(resetMiniCart());
+                    dispatch(resetFirstLogin());
+                    dispatch(logoutCustomer());
+                    props.history.push("/login");
+                });
+            });
+    };
 }
 
 export function cartAddList(payload) {
@@ -33,24 +67,22 @@ export function changeOptions(payload) {
 export function cartAddItem(product, token, quantity = 1, negoId, negoPrice, redirectToCart) {
     // sending request to server, timeout is used as a stub
     return (dispatch) =>
-        customerApi
-            .addCart({ productId: product.id, qty: quantity, negoId, negoPrice }, token)
-            .then((res) => {
-                const { status } = res;
-                if (status.code === 200) {
-                    toast.success(`Produk "${product.name}" berhasil ditambahkan ke keranjang`, { toastId: product.id });
-                    customerApi.getMiniCart(token).then((res) => {
-                        const { data } = res;
-                        dispatch(addMiniCart(data));
-                    });
-                    dispatch(cartListFetchSuccess({ limit: 3, page: 1 }, token));
-                    if (typeof redirectToCart == "function") {
-                        redirectToCart();
-                    }
-                } else {
-                    toast.error(status.message);
+        customerApi.addCart({ productId: product.id, qty: quantity, negoId, negoPrice }, token).then((res) => {
+            const { status } = res;
+            if (status.code === 200) {
+                toast.success(`Produk "${product.name}" berhasil ditambahkan ke keranjang`, { toastId: product.id });
+                customerApi.getMiniCart(token).then((res) => {
+                    const { data } = res;
+                    dispatch(addMiniCart(data));
+                });
+                dispatch(cartListFetchSuccess({ limit: 3, page: 1 }, token));
+                if (typeof redirectToCart == "function") {
+                    redirectToCart();
                 }
-            })
+            } else {
+                toast.error(status.message);
+            }
+        });
 }
 
 export function cartRemoveItem(product, token, cart) {
@@ -71,16 +103,15 @@ export function cartQuantityUpdate(product, token, cart) {
     return (dispatch) =>
         customerApi.changeQuantity(product, token).then((res) => {
             customerApi.getMiniCart(token).then((res) => {
-                const { data, status  } = res;
+                const { data, status } = res;
                 dispatch(addMiniCart(data));
-                console.log("resCart: ",res);
+                console.log("resCart: ", res);
                 console.log("statusCart: ", status.code);
-                console.log("dataCart: ",data);
+                console.log("dataCart: ", data);
                 if (status.code === 400) {
                     toast.error(status.code);
                 }
             });
             dispatch(cartListFetchSuccess(cart.options, token));
-            
         });
 }

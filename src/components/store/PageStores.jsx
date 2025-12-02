@@ -264,7 +264,7 @@ const Stores = (props) => {
         // kalau keyword kosong -> langsung fetch
         if (!state.keyword) {
             dispatch({ type: FETCH_STORE_LIST });
-            store.getStores(state.options, { ...state.filters }, undefined, customer.token).then((res) => {
+            store.getStores(state.options, { ...state.filters }, undefined, customer?.token).then((res) => {
                 const { data } = res;
                 dispatch({ type: FETCH_STORE_LIST_SUCCESS, storeList: data });
             });
@@ -274,7 +274,7 @@ const Stores = (props) => {
         // kalau ada keyword -> debounce 2 detik
         // const handler = setTimeout(() => {
         //     dispatch({ type: FETCH_STORE_LIST });
-        //     store.getStores(state.options, { ...state.filters }, state.keyword, customer.token).then((res) => {
+        //     store.getStores(state.options, { ...state.filters }, state.keyword, customer?.token).then((res) => {
         //         const { data } = res;
         //         dispatch({ type: FETCH_STORE_LIST_SUCCESS, storeList: data });
         //     });
@@ -407,7 +407,7 @@ const Stores = (props) => {
         // kalau ada value → debounce 2 detik
         typingTimeoutRef.current = setTimeout(() => {
             dispatch({ type: FETCH_STORE_LIST });
-            store.getStores(state.options, { ...state.filters }, value, customer.token).then((res) => {
+            store.getStores(state.options, { ...state.filters }, value, customer?.token).then((res) => {
                 dispatch({
                     type: FETCH_STORE_LIST_SUCCESS,
                     storeList: res.data,

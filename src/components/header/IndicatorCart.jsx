@@ -35,7 +35,7 @@ function IndicatorCart(props) {
                 reverseButtons: true,
             }).then((result) => {
                 if (result.isConfirmed) {
-                    cartRemoveItem(item, customer.token, optionCart);
+                    cartRemoveItem(item, customer?.token, optionCart);
                     // Swal.fire("", "", "success");
                 }
             });

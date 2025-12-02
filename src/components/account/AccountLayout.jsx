@@ -146,7 +146,7 @@ function AccountLayout(props) {
                                                 <a
                                                     style={{ cursor: "pointer" }}
                                                     onClick={() => {
-                                                        customerApi.logout(customer.token).then((res) => {
+                                                        customerApi.logout(customer?.token).then((res) => {
                                                             // Bersihkan localStorage
                                                             localStorage.removeItem("auth");
                                                             localStorage.removeItem("token");

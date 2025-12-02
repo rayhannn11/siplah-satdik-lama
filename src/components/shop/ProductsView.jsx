@@ -470,9 +470,10 @@ function ProductsView(props) {
     }
 
     let zone = "";
-    if (Object.keys(customer).length > 0) {
-        zone = customer?.school?.location?.zone;
-    }
+    // if (Object.keys(customer).length > 0) {
+    //     zone = customer?.school?.location?.zone;
+    // }
+    zone = customer?.school?.location?.zone ?? null;
 
     return (
         <div className={rootClasses}>
@@ -484,7 +485,7 @@ function ProductsView(props) {
                 <ModalNego
                     agree={agree}
                     doHandleFetchCompareList={doHandleFetchCompareList}
-                    token={customer.token}
+                    token={customer?.token}
                     open={openNego}
                     product={mainProduct}
                     zone={zone}

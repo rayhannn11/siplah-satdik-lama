@@ -88,7 +88,7 @@ function ShopPageCompare(props) {
         setState({ ...state, isLoading: true });
         setTimeout(() => {
             customerApi
-                .getCompareListOnGoing(customer.token)
+                .getCompareListOnGoing(customer?.token)
                 .then((res) => {
                     const { status } = res;
                     if (status.code === 200) {
@@ -208,7 +208,7 @@ function ShopPageCompare(props) {
             }
             dispatch({ type: "FETCH_PRODUCTS_LIST" });
             customerApi
-                .addProductToCompare(req, customer.token)
+                .addProductToCompare(req, customer?.token)
                 .then((res) => {
                     const { status } = res;
                     if (status.code === 200) {
@@ -228,7 +228,7 @@ function ShopPageCompare(props) {
     };
 
     const doHandleDeleteStoreCompare = ({ storeId, compareNumber }) => {
-        customerApi.deleteStoreCompare(storeId, compareNumber, customer.token).then((res) => {
+        customerApi.deleteStoreCompare(storeId, compareNumber, customer?.token).then((res) => {
             const { status } = res;
             if (status.code === 200) {
                 toast.success(status.message);
@@ -247,7 +247,7 @@ function ShopPageCompare(props) {
         if (findShipping !== undefined) {
             findShipping.shippingCost = shippingCode.split("-")[1];
         }
-        customerApi.changeShippingCompare(req, customer.token).then((res) => {
+        customerApi.changeShippingCompare(req, customer?.token).then((res) => {
             setFetchTotal(false);
             // setOngkir(Number(shippingCode.split("-")[1]));
             setOngkir([...ongkir, findShipping]);
@@ -259,13 +259,13 @@ function ShopPageCompare(props) {
     const doHandleChangeWrapping = (e, storeId) => {
         const { value } = e.target;
 
-        customerApi.changeCompareWrapping({ compareIndex: storeId, wrapping: value }, customer.token).then((res) => {
+        customerApi.changeCompareWrapping({ compareIndex: storeId, wrapping: value }, customer?.token).then((res) => {
             doHandleFetchCompareList();
         });
     };
 
     const doHandleDeleteProductCompare = ({ productId }) => {
-        customerApi.deleteProductCompare(productId, customer.token).then((res) => {
+        customerApi.deleteProductCompare(productId, customer?.token).then((res) => {
             doHandleFetchCompareList();
         });
     };

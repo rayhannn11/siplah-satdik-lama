@@ -36,8 +36,8 @@ class Product extends Component {
     handleAddCart = (quantity) => {
         const { product, cartAddItem, customer } = this.props;
 
-        if (customer.token !== undefined && customer.token !== "") {
-            return cartAddItem(product, customer.token, quantity);
+        if (customer?.token !== undefined && customer?.token !== "") {
+            return cartAddItem(product, customer?.token, quantity);
         } else {
             return new Promise((resolve) => {
                 this.props.history.push("/login");
@@ -50,9 +50,7 @@ class Product extends Component {
     render() {
         const { layout, customer, product, auth } = this.props;
         let zone = "";
-        if (Object.keys(customer).length > 0) {
-            zone = customer?.school?.location?.zone;
-        }
+        zone = customer?.school?.location?.zone ?? null;
         const { quantity } = this.state;
 
         // Check if the product is tax exempt based on ppnPrice value
@@ -366,7 +364,7 @@ class Product extends Component {
                                             )}
 
                                             <ModalNego
-                                                token={customer.token}
+                                                token={customer?.token}
                                                 open={this.state.openNego}
                                                 product={product}
                                                 zone={zone}

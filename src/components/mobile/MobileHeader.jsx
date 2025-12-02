@@ -79,7 +79,7 @@ class MobileHeader extends Component {
                                     <Indicator
                                         className="indicator--mobile"
                                         url="/shop/cart"
-                                        value={miniCart.totalAllProduct}
+                                        value={miniCart?.totalAllProduct}
                                         icon={<Cart20Svg />}
                                     />
                                 )}

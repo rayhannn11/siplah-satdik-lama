@@ -5,5 +5,9 @@ export function loginCustomer(auth) {
 }
 
 export function resetRedux() {
-    return { type: 'RESET' }
+    return { type: "RESET" };
+}
+
+export function logoutCustomer() {
+    return { type: AUTH, auth: false, isLogout: true };
 }

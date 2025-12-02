@@ -7,9 +7,13 @@ import { Provider } from "react-redux";
 
 // application
 import * as serviceWorker from "./serviceWorker";
+import * as serviceWorker2 from "./serviceWorker2";
+
 import Root from "./components/Root";
 import store from "./store";
 import { startVersionChecker } from "./services/versionChecker";
+
+import { startVersionCheckerV2 } from "./version-checker";
 
 // styles
 import "slick-carousel/slick/slick.css";
@@ -28,7 +32,7 @@ import { BrowserRouter } from "react-router-dom";
 import Swal from "sweetalert2";
 
 const appPersistor = persistStore(store);
-
+// startVersionCheckerV2();
 ReactDOM.render(
     <Provider store={store}>
         <PersistGate loading="null" persistor={appPersistor}>
@@ -40,16 +44,38 @@ ReactDOM.render(
     document.getElementById("root")
 );
 
-serviceWorker.register({
-    onUpdate: (registration) => {
-        if (registration && registration.waiting) {
-            const updateWorker = registration.waiting;
-            // Skip notification and directly refresh
-            updateWorker.postMessage({ type: "SKIP_WAITING" });
-            window.location.reload();
+// serviceWorker.register({
+//     onUpdate: (registration) => {
+//         if (registration && registration.waiting) {
+//             const updateWorker = registration.waiting;
+//             // Skip notification and directly refresh
+//             updateWorker.postMessage({ type: "SKIP_WAITING" });
+//             window.location.reload();
+//         }
+//     },
+// });
+
+serviceWorker2.register({
+    onUpdate: async (registration) => {
+        console.log("%c[APP] Update tersedia!", "color: orange;");
+
+        // Hapus seluruh cache (meski SW tidak caching)
+        if ("caches" in window) {
+            const keys = await caches.keys();
+            await Promise.all(keys.map((key) => caches.delete(key)));
         }
+
+        // Minta SW baru untuk ambil alih
+        if (registration.waiting) {
+            registration.waiting.postMessage({ type: "SKIP_WAITING" });
+        }
+
+        // Reload setelah SW aktif
+        navigator.serviceWorker.addEventListener("controllerchange", () => {
+            console.log("[APP] Versi baru aktif → reload");
+            window.location.reload();
+        });
     },
 });
-
 // Start version checker to check for updates every 1.5 minutes
 startVersionChecker();

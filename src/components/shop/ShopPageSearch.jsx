@@ -237,7 +237,7 @@ function ShopPageSearch(props) {
         }
 
         storeApi
-            .getNewProducts(state.options, { ...state.filters }, state.keyword, customer.token)
+            .getNewProducts(state.options, { ...state.filters }, state.keyword, customer?.token)
             .then((result) => {
                 if (canceled) {
                     return;

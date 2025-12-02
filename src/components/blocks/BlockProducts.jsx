@@ -26,7 +26,7 @@ export default function BlockProducts(props) {
 
     if (products.length > 0) {
         const productsList = products.slice(0, 12).map((product, index) => (
-            <div key={index} className="block-products__list-item" style={{ width: "calc(16.5% - 10px)" }}>
+            <div key={index} className="block-products__list-item">
                 <ProductCard product={product} />
             </div>
         ));

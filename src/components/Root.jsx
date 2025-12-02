@@ -29,6 +29,8 @@ import PaymentSimulation from "./site/PaymentSimulation";
 import { handleChangeFirstLogin } from "../store/first-login/firstLoginActions";
 import ReactGA from "react-ga";
 import { AUTH } from "../store/auth/authActionTypes";
+import { logoutCustomer } from "../store/auth/authActions";
+
 // import ErrorBoundary from "./Error";
 
 const Layout = lazy(() => import("./Layout"));
@@ -129,82 +131,161 @@ const Root = (props) => {
         }
     }, [localStorage.getItem("token")]);
 
+    // useEffect(() => {
+    //     customerApi.getOauth().then((res) => {
+    //         const token = res.data;
+    //         if (res.status.code === 200) {
+    //             setIsLoading(true);
+    //             customerApi.getMiniCart(token).then((res) => {
+    //                 const { data } = res;
+    //                 props.addMiniCart(data);
+    //             });
+
+    //             customerApi.getCustomer(res.data).then((res) => {
+    //                 const { data } = res;
+
+    //                 console.log(data);
+
+    //                 // Simpan semua data yang diperlukan ke localStorage
+    //                 localStorage.setItem("auth", "true");
+    //                 localStorage.setItem("token", token);
+    //                 localStorage.setItem("userData", JSON.stringify(data));
+
+    //                 setIsLoading(false);
+    //                 props.loginCustomer(true);
+    //                 props.customerAdd({ ...data, token });
+
+    //                 if (data.totalNotifReminder > 0 && props.firstLogin) {
+    //                     Swal.fire({
+    //                         icon: "info",
+    //                         html: `<p>Anda memiliki <strong>${data.totalNotifReminder} notifikasi</strong> yang perlu dibaca</p>`,
+    //                         confirmButtonText: "Buka Notifikasi",
+    //                         confirmButtonColor: "#0e336d",
+    //                         allowOutsideClick: false,
+    //                         showCancelButton: true,
+    //                     }).then((res) => {
+    //                         if (res.isConfirmed) {
+    //                             props.handleChangeFirstLogin();
+    //                             props.openNotif();
+    //                             window.location.reload();
+    //                         }
+    //                     });
+    //                 } else if (data.totalNotifReminder < 1) {
+    //                     props.handleChangeFirstLogin();
+    //                 }
+
+    //                 var formdata = new FormData();
+    //                 formdata.append("customerId", data.id);
+
+    //                 var requestOptions = {
+    //                     method: "POST",
+    //                     headers: new Headers(),
+    //                     body: formdata,
+    //                     redirect: "follow",
+    //                 };
+
+    //                 fetch(`${process.env.REACT_APP_URL_SIPLAH}/backendseller/Mychat/welcome`, requestOptions).then(
+    //                     (response) => {}
+    //                 );
+    //             });
+    //         } else if (res.status.code === 403 || !res.status.code === 200) {
+    //             // Bersihkan localStorage dan state
+    //             localStorage.removeItem("auth");
+    //             localStorage.removeItem("token");
+    //             localStorage.removeItem("userData");
+
+    //             props.customerAdd({});
+    //             props.resetMiniCart();
+    //             props.loginCustomer({
+    //                 type: AUTH,
+    //                 auth: false,
+    //                 isLogout: true,
+    //             });
+
+    //             if (res.status.code === 403) {
+    //                 toast.error(res.status.message);
+    //             }
+    //         }
+    //     });
+    // }, []);
+
+    // Test Token
     useEffect(() => {
-        customerApi.getOauth().then((res) => {
-            const token = res.data;
-            if (res.status.code === 200) {
-                setIsLoading(true);
-                customerApi.getMiniCart(token).then((res) => {
-                    const { data } = res;
-                    props.addMiniCart(data);
+        const token = props?.customer?.token;
+        if (!token) return;
+
+        const checkToken = async () => {
+            try {
+                const res = await fetch("https://siplah.eurekabookhouse.co.id/api/dashboard", {
+                    method: "GET",
+                    headers: {
+                        Authorization: `${token}`,
+                    },
                 });
 
-                customerApi.getCustomer(res.data).then((res) => {
-                    const { data } = res;
+                const data = await res.json();
+                console.log(data, "response");
 
-                    console.log(data);
+                // 🔥 Jika error seperti {"status":{"code":401,"message":"Token tidak terdefinisi"}}
+                if (data?.status?.code === 401) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Sesi Berakhir",
+                        text: "Terjadi kesalahan. Silakan login kembali.",
+                        confirmButtonText: "OK",
+                    }).then(() => {
+                        // 🔥 Setelah klik OK → baru eksekusi logout block
+                        localStorage.removeItem("auth");
+                        localStorage.removeItem("token");
+                        localStorage.removeItem("userData");
+                        localStorage.removeItem("persist:primary");
+                        localStorage.removeItem("notifShown");
+                        localStorage.clear();
+                        props.customerAdd(null);
+                        props.resetMiniCart();
+                        props.resetFirstLogin();
+                        props.logoutCustomer();
 
-                    // Simpan semua data yang diperlukan ke localStorage
-                    localStorage.setItem("auth", "true");
-                    localStorage.setItem("token", token);
-                    localStorage.setItem("userData", JSON.stringify(data));
+                        if (props.history) {
+                            props.history.push("/login");
+                        }
+                    });
 
-                    setIsLoading(false);
-                    props.loginCustomer(true);
-                    props.customerAdd({ ...data, token });
-
-                    if (data.totalNotifReminder > 0 && props.firstLogin) {
-                        Swal.fire({
-                            icon: "info",
-                            html: `<p>Anda memiliki <strong>${data.totalNotifReminder} notifikasi</strong> yang perlu dibaca</p>`,
-                            confirmButtonText: "Buka Notifikasi",
-                            confirmButtonColor: "#0e336d",
-                            allowOutsideClick: false,
-                            showCancelButton: true,
-                        }).then((res) => {
-                            if (res.isConfirmed) {
-                                props.handleChangeFirstLogin();
-                                props.openNotif();
-                                window.location.reload();
-                            }
-                        });
-                    } else if (data.totalNotifReminder < 1) {
-                        props.handleChangeFirstLogin();
-                    }
-
-                    var formdata = new FormData();
-                    formdata.append("customerId", data.id);
-
-                    var requestOptions = {
-                        method: "POST",
-                        headers: new Headers(),
-                        body: formdata,
-                        redirect: "follow",
-                    };
-
-                    fetch(`${process.env.REACT_APP_URL_SIPLAH}/backendseller/Mychat/welcome`, requestOptions).then(
-                        (response) => {}
-                    );
-                });
-            } else if (res.status.code === 403 || !res.status.code === 200) {
-                // Bersihkan localStorage dan state
-                localStorage.removeItem("auth");
-                localStorage.removeItem("token");
-                localStorage.removeItem("userData");
-
-                props.customerAdd({});
-                props.resetMiniCart();
-                props.loginCustomer({
-                    type: AUTH,
-                    auth: false,
-                    isLogout: true,
-                });
-
-                if (res.status.code === 403) {
-                    toast.error(res.status.message);
+                    return; // hentikan eksekusi lanjut
                 }
+
+                // jika sukses → lanjut
+                console.log("Token valid ✓");
+            } catch (error) {
+                console.log("Request gagal:", error);
+
+                // Jika fetch error jaringan → tetap beri Swal
+                Swal.fire({
+                    icon: "error",
+                    title: "Terjadi Kesalahan",
+                    text: "Gagal menghubungi server.",
+                    confirmButtonText: "OK",
+                }).then(() => {
+                    // tetap jalankan blok error
+                    localStorage.removeItem("auth");
+                    localStorage.removeItem("token");
+                    localStorage.removeItem("userData");
+                    localStorage.removeItem("persist:primary");
+                    localStorage.removeItem("notifShown");
+                    localStorage.clear();
+                    props.customerAdd(null);
+                    props.resetMiniCart();
+                    props.resetFirstLogin();
+                    props.logoutCustomer();
+
+                    if (props.history) {
+                        props.history.push("/login");
+                    }
+                });
             }
-        });
+        };
+
+        checkToken();
     }, []);
 
     // useEffect(() => {
@@ -298,6 +379,7 @@ const mapDispatchToProps = {
     handleChangeFirstLogin,
     openNotif,
     resetFirstLogin,
+    logoutCustomer,
 };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Root));

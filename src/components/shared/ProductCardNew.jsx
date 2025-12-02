@@ -20,8 +20,9 @@ import { wishlistAddItem } from "../../store/wishlist";
 function ProductCardNew(props) {
     const { product, doHandleChooseProduct, layout, quickviewOpen, cartAddItem, dispatch, customer, forAct } = props;
     let zone = "";
-    if (Object.keys(customer).length > 0) {
-        zone = customer?.school?.location?.zone;
+    console.log(customer, "customer");
+    if (customer && Object.keys(customer).length > 0) {
+        zone = customer.school?.location?.zone;
     }
 
     const containerClasses = classNames("product-card", {
@@ -72,8 +73,8 @@ function ProductCardNew(props) {
     }
 
     const handleAddCart = () => {
-        if (customer.token !== undefined && customer.token !== "") {
-            return cartAddItem(product, customer.token);
+        if (customer?.token !== undefined && customer?.token !== "") {
+            return cartAddItem(product, customer?.token);
         } else {
             return new Promise((resolve) => {
                 props.history.push("/login");
@@ -86,7 +87,7 @@ function ProductCardNew(props) {
         <div className={containerClasses}>
             {forAct !== "compare" && (
                 <AsyncAction
-                    action={() =>  quickviewOpen(product.slug, product.mall.id, customer.token)}
+                    action={() => quickviewOpen(product.slug, product.mall.id, customer?.token)}
                     render={({ run, loading }) => (
                         <button
                             type="button"
@@ -129,18 +130,15 @@ function ProductCardNew(props) {
                     <Rating value={product.rating} />
                     <div className=" product-card__rating-legend font-weight-bold">{`${product.review}`}</div>
                 </div>
-            </div> 
-              
+            </div>
+
             <div className="product-card__actions">
-                <span className="font-weight-bold" style={{ color: 'rgb(255, 98, 33)' }}>
+                <span className="font-weight-bold" style={{ color: "rgb(255, 98, 33)" }}>
                     {product.price.zone.length > 0 && props.auth
                         ? product.price.zone[zone - 1].priceCurrencyFormat
                         : product.price.primaryCurrencyFormat}
                 </span>
-                {product?.ppnTagItem &&
-                    <small className="d-block text-secondary">{product?.ppnTagItem}</small>
-                }
-                 
+                {product?.ppnTagItem && <small className="d-block text-secondary">{product?.ppnTagItem}</small>}
             </div>
         </div>
     );

@@ -1222,19 +1222,17 @@ function AccountPageOrderDetails(props) {
 
     const methods = [
         "bank_bri_va",
-        "bank_bpd_va",
+        "bank_bpd_aja",
         "bank_sumsel_babel_va",
         "bank_sulselbar_va",
         "bank_bpd_va_bali",
         "bank_bpd_va_dki",
+        "bank_bpd_va_bjb",
         "bank_bsi_va",
+        "bank_ntt_va",
     ];
 
-    const formatMethod = (val) =>
-        val
-            .split("_")
-            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-            .join(" ");
+    const formatMethod = (val) => val.replace(/_/g, " ").toUpperCase();
 
     const handleQuickBuyAll = async () => {
         console.log("test buyy all");
@@ -1425,7 +1423,14 @@ function AccountPageOrderDetails(props) {
         }
 
         const handleSubmitChangeMethodPayment = async () => {
-            if (!selectedChangePaymentMethod) return;
+            if (!selectedChangePaymentMethod) {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Perhatian",
+                    text: "Silakan pilih metode pembayaran terlebih dahulu.",
+                });
+                return;
+            }
 
             try {
                 const date = new Date().toISOString().split("T")[0];
@@ -1439,6 +1444,15 @@ function AccountPageOrderDetails(props) {
                     methode_va,
                     hash, // hash FE sekarang match BE
                 };
+
+                Swal.fire({
+                    title: "Memproses...",
+                    text: "Sedang mengubah metode pembayaran, mohon tunggu sebentar.",
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    },
+                });
 
                 console.log("Payload kirim:", payload);
 
@@ -1462,8 +1476,12 @@ function AccountPageOrderDetails(props) {
                 Swal.fire({
                     icon: "success",
                     title: "Berhasil",
-                    text: result?.message || "Metode pembayaran berhasil diperbarui",
-                    confirmButtonText: "OK",
+                    text: result?.responseDescription || "Metode pembayaran berhasil diperbarui.",
+                    showConfirmButton: false,
+                    timer: 2000,
+                    didClose: () => {
+                        window.location.reload(); // 🔁 refresh halaman setelah sukses
+                    },
                 });
 
                 setOpenChangeMethodPayment(false);
@@ -2096,32 +2114,95 @@ function AccountPageOrderDetails(props) {
                                     <ModalBody>
                                         <div
                                             style={{
-                                                display: "flex",
-                                                flexDirection: "column",
-                                                gap: "10px",
+                                                display: "grid",
+                                                gridTemplateColumns: "repeat(auto-fit, minmax(110px, 1fr))",
+                                                gap: "12px",
+                                                justifyItems: "center",
+                                                alignItems: "stretch",
                                             }}
                                         >
-                                            {methods.map((method) => (
-                                                <button
-                                                    key={method}
-                                                    style={{
-                                                        padding: "10px",
-                                                        border: "1px solid #ddd",
-                                                        borderRadius: "6px",
-                                                        backgroundColor:
-                                                            selectedChangePaymentMethod === method
-                                                                ? "#d1f0ff"
-                                                                : "#f9f9f9",
-                                                        cursor: "pointer",
-                                                        textAlign: "left",
-                                                    }}
-                                                    onClick={() => setSelectedChangePaymentMethod(method)}
-                                                >
-                                                    {formatMethod(method)}
-                                                </button>
-                                            ))}
+                                            {methods.map((method) => {
+                                                const bankImages = {
+                                                    bank_bri_va:
+                                                        "https://developers.bri.co.id/sites/default/files/inline-images/BRIVA-BRI.jpg",
+                                                    bank_bpd_aja: "/images/bank/bank_bpd.png",
+                                                    bank_sumsel_babel_va: "/images/bank/bank_sumsel_babel.png",
+                                                    bank_sulselbar_va: "/images/bank/bank_sulselbar.jpg",
+                                                    bank_bpd_va_bali: "/images/bank/bank_bpd_bali.png",
+                                                    bank_bpd_va_dki: "/images/bank/bank_dki.png",
+                                                    bank_bpd_va_bjb: "/images/bank/bank_bjb.jpg",
+                                                    bank_bsi_va: "/images/bank/bank_bsi.jpg",
+                                                    bank_ntt_va: "/images/bank/bank_ntt.png",
+                                                };
+
+                                                const isSelected = selectedChangePaymentMethod === method;
+
+                                                return (
+                                                    <button
+                                                        key={method}
+                                                        onClick={() => setSelectedChangePaymentMethod(method)}
+                                                        style={{
+                                                            border: isSelected ? "2px solid #4E65DA" : "1px solid #ddd",
+                                                            borderRadius: "8px",
+                                                            backgroundColor: isSelected ? "#eef4ff" : "#fff",
+                                                            padding: "10px 6px",
+                                                            display: "flex",
+                                                            flexDirection: "column",
+                                                            justifyContent: "center",
+                                                            alignItems: "center",
+                                                            cursor: "pointer",
+                                                            transition: "all 0.2s ease",
+                                                            boxShadow: isSelected
+                                                                ? "0 2px 6px rgba(78,101,218,0.2)"
+                                                                : "0 1px 4px rgba(0,0,0,0.05)",
+                                                            minWidth: "110px",
+                                                            maxWidth: "130px",
+                                                            minHeight: "100px",
+                                                            maxHeight: "115px",
+                                                        }}
+                                                    >
+                                                        <img
+                                                            src={
+                                                                bankImages[method].startsWith("/images/")
+                                                                    ? `${
+                                                                          window.location.pathname.split("/")[1]
+                                                                              ? `/${
+                                                                                    window.location.pathname.split(
+                                                                                        "/"
+                                                                                    )[1]
+                                                                                }`
+                                                                              : ""
+                                                                      }${bankImages[method]}`
+                                                                    : bankImages[method]
+                                                            }
+                                                            alt={formatMethod(method)}
+                                                            style={{
+                                                                width: "70px",
+                                                                height: "35px",
+                                                                objectFit: "contain",
+                                                                marginBottom: "6px",
+                                                            }}
+                                                        />
+                                                        <span
+                                                            style={{
+                                                                fontSize: "11px",
+                                                                fontWeight: 600,
+                                                                color: isSelected ? "#4E65DA" : "#333",
+                                                                textAlign: "center",
+                                                                lineHeight: "1.2",
+                                                                whiteSpace: "normal",
+                                                                overflowWrap: "break-word",
+                                                                marginTop: "10px",
+                                                            }}
+                                                        >
+                                                            {formatMethod(method)}
+                                                        </span>
+                                                    </button>
+                                                );
+                                            })}
                                         </div>
                                     </ModalBody>
+
                                     <ModalFooter>
                                         <Button
                                             color="primary"

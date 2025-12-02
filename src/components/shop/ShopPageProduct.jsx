@@ -34,7 +34,7 @@ function ShopPageProduct(props) {
 
         setIsLoading(true);
 
-        shopApi.getProductBySlug(productSlug, mallId, customer.token).then((res) => {
+        shopApi.getProductBySlug(productSlug, mallId, customer?.token).then((res) => {
             const { status, data } = res;
             if (canceled) {
                 return;
@@ -88,7 +88,7 @@ function ShopPageProduct(props) {
     } else {
         content = (
             <React.Fragment>
-                <div className="block pt-5 mb-0 pb-5" style={{backgroundColor:'rgb(236, 236, 237)'}}>
+                <div className="block pt-5 mb-0 pb-5" style={{ backgroundColor: "rgb(236, 236, 237)" }}>
                     <div className="container">
                         <Product product={product} layout={layout} />
                         <ProductTabs product={product} />

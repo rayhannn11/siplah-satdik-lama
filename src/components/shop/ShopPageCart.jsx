@@ -19,12 +19,17 @@ import {
     changeOptions,
     cartRemoveItem,
 } from "../../store/cart";
+import { customerAdd } from "../../store/customer";
 import AsyncAction from "../shared/AsyncAction";
 import Swal from "sweetalert2";
 import customerApi from "../../api/customer";
 import RequestPostLoader from "../shared/RequestPostLoader";
 import { Collapse } from "reactstrap";
 import { url } from "../../services/utils";
+
+import { resetMiniCart } from "../../store/mini-cart";
+import { resetFirstLogin } from "../../store/first-login/firstLoginActions";
+import { logoutCustomer } from "../../store/auth/authActions";
 
 // Custom hook for debounced API calls
 const useDebounce = (callback, delay) => {
@@ -64,7 +69,9 @@ function buildQuery(options) {
 }
 
 const ShopPageCart = (props) => {
-    const { token } = props.customer;
+    // const { token } = props?.customer;
+
+    const token = props?.customer?.token || "";
     const { cartRemoveItem, cartListFetch, cartQuantityUpdate, cartListFetchSuccess, cart, customer } = props;
     const [sendRequest, setSendRequest] = useState(false);
     const [seeProductPackets, setSeeProductPackets] = useState({});
@@ -127,7 +134,7 @@ const ShopPageCart = (props) => {
         //     });
         // }
         cartListFetch();
-        cartListFetchSuccess(cart.options, token);
+        cartListFetchSuccess(cart.options, token, props);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [cart.options, token]);
 
@@ -140,7 +147,9 @@ const ShopPageCart = (props) => {
                 html: `mohon maaf proses order tidak bisa dilanjutkan dikarenakan sedang tahap sinkronisasi ke DJP`,
             });
         }
-        return new Promise((resolve) => {
+        return new Promise(async (resolve) => {
+            const isValid = await checkToken();
+            if (!isValid) return;
             if (cart.cartList.isHasCompare) {
                 Swal.fire({
                     icon: "info",
@@ -172,17 +181,77 @@ const ShopPageCart = (props) => {
         });
     };
 
-    const doHandleCheckout = (cart) => {
-    //     if (cart.product.length > 25) {
-    //         return Swal.fire({
-    //             icon: "info",
-    //             title: "Jumlah Baris Produk Melebihi Batas",
-    //             showCancelButton: false,
-    //             html: `
-    //   Maksimal <b>25 produk</b> dalam satu kali transaksi. Silakan kurangi jumlah item di keranjang Anda agar dapat melanjutkan ke proses checkout.
-    // `,
-    //         });
-    //     }
+    const checkToken = async () => {
+        Swal.fire({
+            title: "Memeriksa sesi...",
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading();
+            },
+        });
+
+        try {
+            const res = await fetch("https://siplah.eurekabookhouse.co.id/api/dashboard", {
+                method: "GET",
+                headers: { Authorization: `${token}` },
+            });
+
+            const data = await res.json();
+            console.log(data, "response");
+
+            // ❌ Token invalid
+            if (data?.status?.code === 401) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Sesi Berakhir",
+                    text: "Silakan login kembali.",
+                }).then(() => {
+                    localStorage.clear();
+                    props.customerAdd(null);
+                    props.resetMiniCart();
+                    props.resetFirstLogin();
+                    props.logoutCustomer();
+
+                    if (props.history) props.history.push("/login");
+                });
+
+                return false; // ⛔ hentikan proses berikutnya
+            }
+
+            Swal.close();
+            return true; // token valid
+        } catch (error) {
+            console.log("Request gagal:", error);
+
+            Swal.fire({
+                icon: "error",
+                title: "Terjadi Kesalahan",
+                text: "Gagal menghubungi server.",
+            }).then(() => {
+                localStorage.clear();
+                props.customerAdd(null);
+                props.resetMiniCart();
+                props.resetFirstLogin();
+                props.logoutCustomer();
+
+                if (props.history) props.history.push("/login");
+            });
+
+            return false; // ⛔ hentikan proses berikutnya
+        }
+    };
+
+    const doHandleCheckout = async (cart) => {
+        //     if (cart.product.length > 25) {
+        //         return Swal.fire({
+        //             icon: "info",
+        //             title: "Jumlah Baris Produk Melebihi Batas",
+        //             showCancelButton: false,
+        //             html: `
+        //   Maksimal <b>25 produk</b> dalam satu kali transaksi. Silakan kurangi jumlah item di keranjang Anda agar dapat melanjutkan ke proses checkout.
+        // `,
+        //         });
+        //     }
         if (process.env.REACT_APP_IS_MAINTENANCE === "true") {
             return Swal.fire({
                 icon: "info",
@@ -191,6 +260,8 @@ const ShopPageCart = (props) => {
                 html: `mohon maaf proses order tidak bisa dilanjutkan dikarenakan sedang tahap sinkronisasi ke DJP`,
             });
         }
+        const isValid = await checkToken();
+        if (!isValid) return;
         props.addCheckout(cart);
         props.history.push(`/shop/checkout/${cart.id}?from=cart&arkas=false`);
         // props.history.push("/shop/checkoutArkas");
@@ -790,6 +861,10 @@ const mapDispatchToProps = {
     changeOptions,
     addCheckout,
     cartQuantityUpdate,
+    resetMiniCart,
+    resetFirstLogin,
+    logoutCustomer,
+    customerAdd,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ShopPageCart);

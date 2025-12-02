@@ -159,7 +159,7 @@ const ShopPageCheckout = (props) => {
     //     setKurirCost(state.checkout.shippingCost);
 
     //     customerApi
-    //         .putUpdatePra(customer.token, id, kurir, kurirCost, paymentMethodName, paymentDue, wrapping)
+    //         .putUpdatePra(customer?.token, id, kurir, kurirCost, paymentMethodName, paymentDue, wrapping)
     //         .then((res) => {
     //             console.log(res);
     //             let submitUrl = `/${paymentMethodName}/${state.checkout.shippingTerpilih}/${paymentDue}/${state.checkout.shippingCost}`;
@@ -179,7 +179,7 @@ const ShopPageCheckout = (props) => {
             setKurirCost(state.checkout.shippingCost);
 
             const res = await customerApi.putUpdatePra(
-                customer.token,
+                customer?.token,
                 id,
                 kurir,
                 kurirCost,
@@ -217,6 +217,8 @@ const ShopPageCheckout = (props) => {
         const location = `${window.location.pathname}${query ? "?" : ""}${query}`;
         window.history.replaceState(null, "", location);
     }, [state.options]);
+
+    console.log(customer, "customer");
 
     useEffect(() => {
         if (id === undefined) return;
@@ -264,7 +266,7 @@ const ShopPageCheckout = (props) => {
     const doHandleFetchCheckout = () => {
         dispatch({ type: "FETCH_CHECKOUT" });
 
-        customerApi.getCheckout(customer.token, id, state.options).then((res) => {
+        customerApi.getCheckout(customer?.token, id, state.options).then((res) => {
             const { status, data } = res;
             if (status.code === 200) {
                 dispatch({ type: "FETCH_CHECKOUT_SUCCESS", checkout: data });
@@ -345,7 +347,7 @@ const ShopPageCheckout = (props) => {
             }
         } else {
             const req = { storeId: state.checkout.cartSelected.mall.id, shippingCode: item.value };
-            customerApi.changeShippingCompare(req, customer.token).then((res) => {
+            customerApi.changeShippingCompare(req, customer?.token).then((res) => {
                 doHandleFetchCheckout();
             });
         }
@@ -765,7 +767,7 @@ const ShopPageCheckout = (props) => {
                                 style={{ width: "50%", height: 60, marginRight: 10, fontSize: 14 }}
                                 onClick={(val) =>
                                     doHandleChangeSelect(
-                                        { value: "bank_ntt", name: "BPD Nusa Tenggara Timur " },
+                                        { value: "bank_ntt_va", name: "BPD Nusa Tenggara Timur " },
                                         "paymentMethod"
                                     )
                                 }
@@ -1170,7 +1172,7 @@ const ShopPageCheckout = (props) => {
         };
         if (isValid(req)) {
             return new Promise((resolve) => {
-                customerApi.createOrder(req, customer.token).then((res) => {
+                customerApi.createOrder(req, customer?.token).then((res) => {
                     const { data, status } = res;
                     if (status.code === 200) {
                         props.history.push(`/account/orders/${data}`);
@@ -1183,7 +1185,7 @@ const ShopPageCheckout = (props) => {
                         toast.error("Pesanan gagal dibuat");
                     }
                     setSendRequest(false);
-                    customerApi.getMiniCart(customer.token).then((res) => {
+                    customerApi.getMiniCart(customer?.token).then((res) => {
                         const { data } = res;
                         addMiniCart(data);
                     });
@@ -1242,7 +1244,7 @@ const ShopPageCheckout = (props) => {
         };
         if (isValid(req)) {
             return new Promise((resolve) => {
-                customerApi.createOrder(req, customer.token).then((res) => {
+                customerApi.createOrder(req, customer?.token).then((res) => {
                     const { data, status } = res;
                     if (status.code === 200) {
                         props.history.push(`/account/orders/${data}`);
@@ -1257,7 +1259,7 @@ const ShopPageCheckout = (props) => {
                     toast.success("yeatyt");
 
                     setSendRequest(false);
-                    customerApi.getMiniCart(customer.token).then((res) => {
+                    customerApi.getMiniCart(customer?.token).then((res) => {
                         const { data } = res;
                         addMiniCart(data);
                     });
@@ -1277,7 +1279,7 @@ const ShopPageCheckout = (props) => {
 
     console.log(state.checkout?.from);
 
-    const { name, location, telephone } = customer.school;
+    const { name, location, telephone } = customer?.school;
 
     if (sendRequest) {
         return <RequestPostLoader />;

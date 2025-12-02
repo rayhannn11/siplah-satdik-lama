@@ -65,7 +65,7 @@ function IndicatorAccount(props) {
 
                             window.location.href = "/satdik";
                             customerApi
-                                .logout(customer.token)
+                                .logout(customer?.token)
                                 .then((res) => {
                                     // Reset state dulu
                                     // props.loginCustomer({
@@ -100,7 +100,7 @@ function IndicatorAccount(props) {
                                 });
                         }}
                         // onClick={() => {
-                        //     customerApi.logout(customer.token).then((res) => {
+                        //     customerApi.logout(customer?.token).then((res) => {
                         //         // Bersihkan localStorage
                         //         localStorage.removeItem("auth");
                         //         localStorage.removeItem("token");

@@ -16,7 +16,9 @@ import { Modal, ModalBody } from "reactstrap";
 // application
 import AsyncAction from "../shared/AsyncAction";
 import RequestPostLoader from "../shared/RequestPostLoader";
-import { addMiniCart } from "../../store/mini-cart";
+import { addMiniCart, resetMiniCart } from "../../store/mini-cart";
+import { resetFirstLogin } from "../../store/first-login/firstLoginActions";
+import { logoutCustomer } from "../../store/auth/authActions";
 
 // data stubs
 import theme from "../../data/theme";
@@ -24,6 +26,7 @@ import customerApi from "../../api/customer";
 import BlockLoader from "../blocks/BlockLoader";
 import { url } from "../../services/utils";
 import { ArrowLeft } from "../../svg";
+//../store/first-login/firstLoginActions
 
 const customStyles = {
     placeholder: (provided, state) => ({
@@ -169,7 +172,7 @@ const ShopPageCheckoutArkas = (props) => {
     const doHandleFetchCheckout = () => {
         dispatch({ type: "FETCH_CHECKOUT" });
 
-        customerApi.getCheckout(customer.token, id_local, state.options).then((res) => {
+        customerApi.getCheckout(customer?.token, id_local, state.options).then((res) => {
             const { status, data } = res;
             if (status.code === 200) {
                 dispatch({ type: "FETCH_CHECKOUT_SUCCESS", checkout: data });
@@ -180,12 +183,32 @@ const ShopPageCheckoutArkas = (props) => {
                     allowOutsideClick: false,
                     icon: "warning",
                     confirmButtonText: "OK",
-                }).then((result) => {
+                }).then(async (result) => {
                     if (result.isConfirmed) {
-                        props.history.push("/shop/cart");
+                        console.log("test pertama");
+                        localStorage.removeItem("auth");
+                        localStorage.removeItem("auth");
+                        localStorage.removeItem("token");
+                        localStorage.removeItem("userData");
+                        localStorage.removeItem("persist:primary");
+                        localStorage.removeItem("notifShown");
+                        localStorage.clear();
+                        localStorage.removeItem("notifShown");
+
+                        // props.customerAdd(null);
+                        props.resetMiniCart();
+                        props.resetFirstLogin();
+                        props.logoutCustomer();
+
+                        await new Promise((resolve) => setTimeout(resolve, 100));
+
+                        // props.history.push("/login");
+                        console.log("test kedua");
                     }
                 });
-                dispatch({ type: "FETCH_CHECKOUT_SUCCESS", checkout: null });
+                props.history.push("/login");
+
+                // dispatch({ type: "FETCH_CHECKOUT_SUCCESS", checkout: null });
             }
         });
     };
@@ -223,7 +246,7 @@ const ShopPageCheckoutArkas = (props) => {
             }
         } else {
             const req = { storeId: state.checkout.cartSelected.mall.id, shippingCode: item.value };
-            customerApi.changeShippingCompare(req, customer.token).then((res) => {
+            customerApi.changeShippingCompare(req, customer?.token).then((res) => {
                 doHandleFetchCheckout();
             });
         }
@@ -637,7 +660,7 @@ const ShopPageCheckoutArkas = (props) => {
         req = { ...req, note, shipping: state.options.shipping || "penyedia", id, from: fromLocalStorage };
         if (isValid(req)) {
             return new Promise((resolve) => {
-                customerApi.createOrder(req, customer.token).then((res) => {
+                customerApi.createOrder(req, customer?.token).then((res) => {
                     const { data, status } = res;
                     if (status.code === 200) {
                         props.history.push(`/account/orders/${data}`);
@@ -650,7 +673,7 @@ const ShopPageCheckoutArkas = (props) => {
                         toast.error("Pesanan gagal dibuat");
                     }
                     setSendRequest(false);
-                    customerApi.getMiniCart(customer.token).then((res) => {
+                    customerApi.getMiniCart(customer?.token).then((res) => {
                         const { data } = res;
                         addMiniCart(data);
                     });
@@ -710,13 +733,13 @@ const ShopPageCheckoutArkas = (props) => {
         console.log("req:", req);
 
         return new Promise((resolve) => {
-            customerApi.createOrder(req, customer.token).then((res) => {
+            customerApi.createOrder(req, customer?.token).then((res) => {
                 const { data, status, result } = res;
-                
+
                 // Check for 400 status code in result.status.code
                 if (result && result.status && result.status.code === 400) {
                     setSendRequest(false);
-                    
+
                     Swal.fire({
                         icon: "error",
                         title: "Transaksi Gagal",
@@ -731,23 +754,23 @@ const ShopPageCheckoutArkas = (props) => {
                         confirmButtonColor: "#0e336d",
                         allowOutsideClick: false,
                         customClass: {
-                            popup: 'animated bounceIn',
-                            confirmButton: 'btn btn-primary'
-                        }
+                            popup: "animated bounceIn",
+                            confirmButton: "btn btn-primary",
+                        },
                     }).then((result) => {
                         if (result.isConfirmed) {
                             props.history.push("/shop/cart");
                         }
                     });
-                    
-                    customerApi.getMiniCart(customer.token).then((res) => {
+
+                    customerApi.getMiniCart(customer?.token).then((res) => {
                         const { data } = res;
                         addMiniCart(data);
                     });
                     resolve();
                     return;
                 }
-                
+
                 if (status.code === 200) {
                     props.history.push(`/account/orders/${data}`);
 
@@ -759,7 +782,7 @@ const ShopPageCheckoutArkas = (props) => {
                     toast.error("Pesanan gagal dibuat");
                 }
                 setSendRequest(false);
-                customerApi.getMiniCart(customer.token).then((res) => {
+                customerApi.getMiniCart(customer?.token).then((res) => {
                     const { data } = res;
                     addMiniCart(data);
                 });
@@ -804,7 +827,7 @@ const ShopPageCheckoutArkas = (props) => {
         req = { ...req, note, shipping: state.options.shipping || "penyedia", id, from: fromLocalStorage };
         if (isValid(req)) {
             return new Promise((resolve) => {
-                customerApi.createOrder(req, customer.token).then((res) => {
+                customerApi.createOrder(req, customer?.token).then((res) => {
                     const { data, status } = res;
                     if (status.code === 200) {
                         props.history.push(`/account/orders/${data}`);
@@ -817,7 +840,7 @@ const ShopPageCheckoutArkas = (props) => {
                         toast.error("Pesanan gagal dibuat");
                     }
                     setSendRequest(false);
-                    customerApi.getMiniCart(customer.token).then((res) => {
+                    customerApi.getMiniCart(customer?.token).then((res) => {
                         const { data } = res;
                         addMiniCart(data);
                     });
@@ -889,10 +912,10 @@ const ShopPageCheckoutArkas = (props) => {
             }).then((result) => {
                 if (result.dismiss === Swal.DismissReason.cancel) {
                     // Aksi jika tombol "Batalkan" diklik
-                    customerApi.deleteAllCart(state.checkout.pratransakasiId, customer.token).then((res) => {
+                    customerApi.deleteAllCart(state.checkout.pratransakasiId, customer?.token).then((res) => {
                         toast.success(`Produk berhasil dihapus dari keranjang`);
                         props.history.push("/");
-                        customerApi.getMiniCart(customer.token).then((res) => {
+                        customerApi.getMiniCart(customer?.token).then((res) => {
                             const { data } = res;
                             addMiniCart(data);
                         });
@@ -1336,6 +1359,9 @@ const mapStateToProps = (state) => ({ checkout: state.checkout, customer: state.
 
 const mapDispatchToProps = {
     addMiniCart,
+    resetMiniCart,
+    resetFirstLogin,
+    logoutCustomer,
 };
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ShopPageCheckoutArkas));

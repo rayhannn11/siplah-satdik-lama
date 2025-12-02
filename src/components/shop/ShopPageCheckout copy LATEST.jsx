@@ -141,7 +141,7 @@ const ShopPageCheckout = (props) => {
         setKurirCost(state.checkout.shippingCost);
 
         customerApi
-            .putUpdatePra(customer.token, id, kurir, kurirCost, paymentMethodName, paymentDue, wrapping)
+            .putUpdatePra(customer?.token, id, kurir, kurirCost, paymentMethodName, paymentDue, wrapping)
             .then((res) => {
                 console.log(res);
                 let submitUrl = `/${paymentMethodName}/${state.checkout.shippingTerpilih}/${paymentDue}/${state.checkout.shippingCost}`;
@@ -175,7 +175,7 @@ const ShopPageCheckout = (props) => {
     const doHandleFetchCheckout = () => {
         dispatch({ type: "FETCH_CHECKOUT" });
 
-        customerApi.getCheckout(customer.token, id, state.options).then((res) => {
+        customerApi.getCheckout(customer?.token, id, state.options).then((res) => {
             const { status, data } = res;
             if (status.code === 200) {
                 dispatch({ type: "FETCH_CHECKOUT_SUCCESS", checkout: data });
@@ -247,7 +247,7 @@ const ShopPageCheckout = (props) => {
             }
         } else {
             const req = { storeId: state.checkout.cartSelected.mall.id, shippingCode: item.value };
-            customerApi.changeShippingCompare(req, customer.token).then((res) => {
+            customerApi.changeShippingCompare(req, customer?.token).then((res) => {
                 doHandleFetchCheckout();
             });
         }
@@ -808,7 +808,7 @@ const ShopPageCheckout = (props) => {
         req = { ...req, note, shipping: state.options.shipping || "penyedia", id, from: state.checkout.from };
         if (isValid(req)) {
             return new Promise((resolve) => {
-                customerApi.createOrder(req, customer.token).then((res) => {
+                customerApi.createOrder(req, customer?.token).then((res) => {
                     const { data, status } = res;
                     if (status.code === 200) {
                         props.history.push(`/account/orders/${data}`);
@@ -821,7 +821,7 @@ const ShopPageCheckout = (props) => {
                         toast.error("Pesanan gagal dibuat");
                     }
                     setSendRequest(false);
-                    customerApi.getMiniCart(customer.token).then((res) => {
+                    customerApi.getMiniCart(customer?.token).then((res) => {
                         const { data } = res;
                         addMiniCart(data);
                     });
@@ -872,7 +872,7 @@ const ShopPageCheckout = (props) => {
         req = { ...req, note, shipping: state.options.shipping || "penyedia", id, from: state.checkout.from };
         if (isValid(req)) {
             return new Promise((resolve) => {
-                customerApi.createOrder(req, customer.token).then((res) => {
+                customerApi.createOrder(req, customer?.token).then((res) => {
                     const { data, status } = res;
                     if (status.code === 200) {
                         props.history.push(`/account/orders/${data}`);
@@ -885,7 +885,7 @@ const ShopPageCheckout = (props) => {
                         toast.error("Pesanan gagal dibuat");
                     }
                     setSendRequest(false);
-                    customerApi.getMiniCart(customer.token).then((res) => {
+                    customerApi.getMiniCart(customer?.token).then((res) => {
                         const { data } = res;
                         addMiniCart(data);
                     });

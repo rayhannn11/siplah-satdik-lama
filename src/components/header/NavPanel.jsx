@@ -75,7 +75,6 @@ function NavPanel(props) {
                                 <IndicatorNotification />
                                 <CartIndicator />
                                 <IndicatorAccount />
-                                <p>test</p>
                             </>
                         ) : (
                             <div className="d-flex justify-content-center align-items-center">

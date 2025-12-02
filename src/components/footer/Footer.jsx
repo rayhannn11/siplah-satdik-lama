@@ -35,6 +35,28 @@ function Footer(props) {
         "/images/bank/bank_sumsel_babel.png",
         "/images/bank/bank_sumut.png",
     ];
+
+    // const bankImages = [
+    //     "/images/bank/bank_bjb.avif",
+    //     "/images/bank/bank_bpd_bali.avif",
+    //     "/images/bank/bank_bsi.avif",
+    //     "/images/bank/bank_dki.avif",
+    //     "/images/bank/bank_jambi.avif",
+    //     "/images/bank/bank_jateng.avif",
+    //     "/images/bank/bank_jatim.avif",
+    //     "/images/bank/bank_kalbar.avif",
+    //     "/images/bank/bank_kalsel.avif",
+    //     "/images/bank/bank_kaltimtara.avif",
+    //     "/images/bank/bank_lampung.avif",
+    //     "/images/bank/bank_nagari.avif",
+    //     "/images/bank/bank_ntb_syariah.avif",
+    //     "/images/bank/bank_ntt.avif",
+    //     "/images/bank/bank_sulselbar.avif",
+    //     "/images/bank/bank_sulut_go.avif",
+    //     "/images/bank/bank_sumsel_babel.avif",
+    //     "/images/bank/bank_sumut.avif",
+    // ];
+
     const paymentImages = [...images.payment, ...bankImages];
     console.log(paymentImages, "paymentImages");
     const informationLinks = [

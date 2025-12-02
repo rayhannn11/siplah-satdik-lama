@@ -14,7 +14,7 @@ import BlockLoader from "../blocks/BlockLoader";
 
 function AccountPageDashboard(props) {
     const { customer } = props;
-    const { school } = customer;
+    const school = customer?.school ?? null;
     const [state, setState] = useState({
         dataIsLoading: true,
         data: null,
@@ -22,14 +22,14 @@ function AccountPageDashboard(props) {
 
     useEffect(() => {
         setState({ ...state, dataIsLoading: true });
-        customerApi.getDashboard(customer.token).then((res) => {
+        customerApi.getDashboard(customer?.token).then((res) => {
             const { data } = res;
 
             setState({ ...state, dataIsLoading: false, data });
         });
         return () => {};
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [customer.token]);
+    }, [customer?.token]);
 
     if (state.dataIsLoading) {
         return <BlockLoader />;
@@ -58,8 +58,8 @@ function AccountPageDashboard(props) {
                     <div className="profile-card__avatar">
                         <img src="https://siplah.eurekabookhouse.co.id/assets/uplod/default-avatar.png" alt="" />
                     </div>
-                    <div className="profile-card__name">{customer.name}</div>
-                    <div className="profile-card__email">{customer.email}</div>
+                    <div className="profile-card__name">{customer?.name}</div>
+                    <div className="profile-card__email">{customer?.email}</div>
                 </div>
             </div>
             <div className="dashboard__address card address-card address-card--featured">

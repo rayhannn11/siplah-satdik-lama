@@ -32,13 +32,13 @@ const AccountPageComparisonReports = (props) => {
 
     useEffect(() => {
         dispatch({ type: FETCH_COMPARISON_REPORT });
-        customerApi.getCompareReport(id, customer.token).then((res) => {
+        customerApi.getCompareReport(id, customer?.token).then((res) => {
             const { data } = res;
 
             dispatch({ type: FETCH_COMPARISON_REPORT_SUCCESS, comparisonReport: data });
         });
         return () => {};
-    }, [state.options, customer.token, id]);
+    }, [state.options, customer?.token, id]);
     if (state.comparisonReportIsLoading) {
         return <BlockLoader />;
     }

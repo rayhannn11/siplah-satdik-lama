@@ -72,7 +72,7 @@ const Search = React.memo((props) => {
                     const options = { limit: 5, page: 1 };
 
                     shopApi
-                        .getSuggestions(query, options, customer.token)
+                        .getSuggestions(query, options, customer?.token)
                         .then((response) => {
                             setIsLoadingSuggestions(false);
                             console.log("Search API Response:", response); // Debug log
@@ -121,7 +121,7 @@ const Search = React.memo((props) => {
     //         const options = { limit: 5, page: 1 };
     //         setSuggestionsOpen(true);
     //         setHasSuggestions(true);
-    //         shopApi.getSuggestions(query, options, customer.token).then((products) => {
+    //         shopApi.getSuggestions(query, options, customer?.token).then((products) => {
     //           setIsLoadingSuggestions(false);
     //           setSuggestedProducts(products.data.items);
     //           setSuggestedToko(products.data.itemMalls);

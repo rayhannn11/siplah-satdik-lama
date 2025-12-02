@@ -29,15 +29,18 @@ function Header(props) {
                         />
                     </Link>
                 </div>
-                <div className="site-header__search">
-                    {/* <Search context="header" /> */}
-                </div>
+                <div className="site-header__search">{/* <Search context="header" /> */}</div>
                 <div className="site-header__phone">
                     <div className="site-header__phone-title">
                         <FormattedMessage id="header.phoneLabel" defaultMessage="Customer Service" />
                     </div>
                     <div className="site-header__phone-number">
-                        <a rel="noopener noreferrer" className="text-dark" href="https://wa.me/6282111972195" target="_blank">
+                        <a
+                            rel="noopener noreferrer"
+                            className="text-dark"
+                            href="https://wa.me/6282111972195"
+                            target="_blank"
+                        >
                             <i className="footer-contacts__icon fab fa-whatsapp" />
                             0821 1197 2195
                         </a>

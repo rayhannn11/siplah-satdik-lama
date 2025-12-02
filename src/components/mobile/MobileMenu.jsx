@@ -89,7 +89,7 @@ function MobileMenu(props) {
             closeMobileMenu();
         }
         if (item.label.toLowerCase() === "logout") {
-            customerApi.logout(customer.token).then((res) => {
+            customerApi.logout(customer?.token).then((res) => {
                 props.history.push("/login");
                 props.loginCustomer(false);
                 props.customerAdd({});
@@ -134,6 +134,7 @@ const mapDispatchToProps = {
     changeCurrency: currencyChange,
     customerAdd,
     loginCustomer,
-    resetMiniCart,resetFirstLogin
+    resetMiniCart,
+    resetFirstLogin,
 };
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(MobileMenu));

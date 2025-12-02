@@ -17,7 +17,7 @@ import Pagination from "../shared/Pagination";
 import { connect } from "react-redux";
 import { toast } from "react-toastify";
 import AsyncAction from "../shared/AsyncAction";
-import ReactGA from 'react-ga';
+import ReactGA from "react-ga";
 
 const initialState = {
     init: false,
@@ -82,7 +82,7 @@ const AccountPageNotification = (props) => {
     const [state, dispatch] = useReducer(reducer, initialState);
     const { customer, location } = props;
     const history = useHistory();
-    const [reload, setReload] = useState(true)
+    const [reload, setReload] = useState(true);
     const shopLinks = [
         { title: "Informasi untuk anda", url: "?type=notif" },
         { title: "Perlu Ditindaklanjuti", url: "?isNotifReminder=1" },
@@ -103,11 +103,10 @@ const AccountPageNotification = (props) => {
 
     useEffect(() => {
         ReactGA.event({
-            category: 'School Notification',
-            action: 'Show All Notification',
+            category: "School Notification",
+            action: "Show All Notification",
         });
-    }, [])
-
+    }, []);
 
     const handleEvent = (event, picker) => {
         dispatch({
@@ -130,27 +129,27 @@ const AccountPageNotification = (props) => {
     };
 
     const handleReadAllNotification = () => {
-        return customerApi.readAllNotification(customer.token).then(res => {
+        return customerApi.readAllNotification(customer?.token).then((res) => {
             if (res.status.code === 200) {
-                toast.success('Semua notifikasi telah dibaca', { toastId: 'read' });
-                setReload(state => !state)
+                toast.success("Semua notifikasi telah dibaca", { toastId: "read" });
+                setReload((state) => !state);
             } else {
-                toast.error('Terjadi kesalaha pada sistem');
+                toast.error("Terjadi kesalaha pada sistem");
             }
-        })
-    }
+        });
+    };
 
     useEffect(() => {
         dispatch({ type: FETCH_NOTIFICATION_LIST });
         if (location.search.includes("log")) {
-            customerApi.getLog(state.options, state.filters, customer.token).then((res) => {
+            customerApi.getLog(state.options, state.filters, customer?.token).then((res) => {
                 const { data } = res;
                 dispatch({ type: FETCH_NOTIFICATION_LIST_SUCCESS, notification: data });
             });
         } else {
             const isNotifReminder = queryString.parse(location.search).isNotifReminder || 0;
             customerApi
-                .getNotification({ ...state.options, isNotifReminder }, { ...state.filters }, customer.token)
+                .getNotification({ ...state.options, isNotifReminder }, { ...state.filters }, customer?.token)
                 .then((res) => {
                     const { data } = res;
 
@@ -160,7 +159,7 @@ const AccountPageNotification = (props) => {
                     dispatch({ type: FETCH_NOTIFICATION_LIST_SUCCESS, notification: null });
                 });
         }
-    }, [state.options, state.filters, customer.token, location.search, reload]);
+    }, [state.options, state.filters, customer?.token, location.search, reload]);
 
     const handlePage = (value) => {
         dispatch({ type: SET_OPTION_VALUE, value });
@@ -174,14 +173,13 @@ const AccountPageNotification = (props) => {
             default:
                 return `/account/orders/${item.linkRedirect}`;
         }
-
     };
 
     const handleRedirect = (item) => {
-        customerApi.readNotification({ id: item.id }, customer.token);
+        customerApi.readNotification({ id: item.id }, customer?.token);
         ReactGA.event({
-            category: 'School Notification',
-            action: 'Show Order Detail From Notification',
+            category: "School Notification",
+            action: "Show Order Detail From Notification",
         });
         history.push(urlRedirect(item));
     };
@@ -197,7 +195,7 @@ const AccountPageNotification = (props) => {
                 <div className="row">
                     <div className="col-6">
                         <DateRangePicker
-                            onEvent={() => { }}
+                            onEvent={() => {}}
                             onApply={handleEvent}
                             onCallback={handleCallback}
                             initialSettings={{
@@ -243,15 +241,19 @@ const AccountPageNotification = (props) => {
                                         style={
                                             !item.isRead
                                                 ? {
-                                                    background: "rgba(14, 51, 109, 0.11) none repeat scroll 0% 0%",
-                                                    padding: '6px 10px'
-                                                }
-                                                : { padding: '6px 10px' }
+                                                      background: "rgba(14, 51, 109, 0.11) none repeat scroll 0% 0%",
+                                                      padding: "6px 10px",
+                                                  }
+                                                : { padding: "6px 10px" }
                                         }
                                         className="list-group-item list-group-item-action cp"
                                     >
-                                        <div className="d-flex alig" >
-                                            <img src={item.icon} alt='' style={{ width: '60px',height: '60px', alignSelf: 'center' }} />
+                                        <div className="d-flex alig">
+                                            <img
+                                                src={item.icon}
+                                                alt=""
+                                                style={{ width: "60px", height: "60px", alignSelf: "center" }}
+                                            />
                                             <div className="ml-2">
                                                 <strong>{item.title}</strong>
                                                 <br />
@@ -261,7 +263,8 @@ const AccountPageNotification = (props) => {
                                                     <small>{item.dateAt}</small>
                                                     {item.mustFollowUp && (
                                                         <small className="text-primary">
-                                                            Tindaklanjuti <i class="fa fa-angle-right" aria-hidden="true"></i>
+                                                            Tindaklanjuti{" "}
+                                                            <i class="fa fa-angle-right" aria-hidden="true"></i>
                                                         </small>
                                                     )}
                                                 </div>
@@ -318,25 +321,29 @@ const AccountPageNotification = (props) => {
             </div>
             <div className="d-flex justify-content-between align-items-center mb-3">
                 <h4 className="m-0">{location.search.includes("log") ? "Log Aktifitas" : "Notifikasi"}</h4>
-                {location.search.includes("notif") && <AsyncAction
-                    action={handleReadAllNotification}
-                    render={({ run, loading }) => (
-                        <button
-                            style={{
-                                // fontSize: '12px',
-                                // padding: '5px',
-                                // height: 'calc(1.543rem + 2px)'
-                            }}
-                            type="button"
-                            onClick={run}
-                            className={classNames("btn btn-primary btn-md", {
-                                "btn-loading": loading,
-                            })}
-                        >
-                            Tandai sudah dibaca
-                        </button>
-                    )}
-                />}
+                {location.search.includes("notif") && (
+                    <AsyncAction
+                        action={handleReadAllNotification}
+                        render={({ run, loading }) => (
+                            <button
+                                style={
+                                    {
+                                        // fontSize: '12px',
+                                        // padding: '5px',
+                                        // height: 'calc(1.543rem + 2px)'
+                                    }
+                                }
+                                type="button"
+                                onClick={run}
+                                className={classNames("btn btn-primary btn-md", {
+                                    "btn-loading": loading,
+                                })}
+                            >
+                                Tandai sudah dibaca
+                            </button>
+                        )}
+                    />
+                )}
             </div>
 
             {content}

@@ -39,7 +39,7 @@ function IndicatorCart(props) {
     let dropdown;
 
     // useEffect(() => {
-    //     customerApi.getNotification({ page: 1, limit: 3, isNotifReminder: 1 }, {}, customer.token).then((res) => {
+    //     customerApi.getNotification({ page: 1, limit: 3, isNotifReminder: 1 }, {}, customer?.token).then((res) => {
     //         if (res.status.code === 200) {
     //             setNotificationReminder(res.data);
     //         }
@@ -50,7 +50,7 @@ function IndicatorCart(props) {
     // }, [hasSwalShown]);
 
     // useEffect(() => {
-    //     customerApi.getNotification({ page: 1, limit: 3, isNotifReminder: 0 }, {}, customer.token).then((res) => {
+    //     customerApi.getNotification({ page: 1, limit: 3, isNotifReminder: 0 }, {}, customer?.token).then((res) => {
     //         if (res.status.code === 200) {
     //             setNotification(res.data);
     //         }
@@ -65,8 +65,8 @@ function IndicatorCart(props) {
 
         if (!hasSwalShown) {
             Promise.all([
-                customerApi.getNotification({ page: 1, limit: 3, isNotifReminder: 1 }, {}, customer.token),
-                customerApi.getNotification({ page: 1, limit: 3, isNotifReminder: 0 }, {}, customer.token),
+                customerApi.getNotification({ page: 1, limit: 3, isNotifReminder: 1 }, {}, customer?.token),
+                customerApi.getNotification({ page: 1, limit: 3, isNotifReminder: 0 }, {}, customer?.token),
             ]).then(([resReminder, resNotif]) => {
                 if (resReminder.status.code === 200) {
                     console.log(resReminder.data);
@@ -84,7 +84,7 @@ function IndicatorCart(props) {
     }, []);
 
     const handleReadAllNotification = () => {
-        return customerApi.readAllNotification(customer.token).then((res) => {
+        return customerApi.readAllNotification(customer?.token).then((res) => {
             if (res.status.code === 200) {
                 toast.success("Semua notifikasi telah dibaca");
                 setReload((state) => !state);
@@ -105,15 +105,15 @@ function IndicatorCart(props) {
     };
 
     // const handleRedirect = (item) => {
-    //     customerApi.readNotification({ id: item.id }, customer.token);
+    //     customerApi.readNotification({ id: item.id }, customer?.token);
 
-    //     customerApi.getNotification({ page: 1, limit: 3, isNotifReminder: 1 }, {}, customer.token).then((res) => {
+    //     customerApi.getNotification({ page: 1, limit: 3, isNotifReminder: 1 }, {}, customer?.token).then((res) => {
     //         if (res.status.code === 200) {
     //             setNotificationReminder(res.data);
     //         }
     //     });
 
-    //     customerApi.getNotification({ page: 1, limit: 3, isNotifReminder: 0 }, {}, customer.token).then((res) => {
+    //     customerApi.getNotification({ page: 1, limit: 3, isNotifReminder: 0 }, {}, customer?.token).then((res) => {
     //         if (res.status.code === 200) {
     //             setNotification(res.data);
     //         }
@@ -127,7 +127,7 @@ function IndicatorCart(props) {
     // };
 
     const handleRedirect = async (item) => {
-        await customerApi.readNotification({ id: item.id }, customer.token);
+        await customerApi.readNotification({ id: item.id }, customer?.token);
 
         setNotification((prev) => {
             const updatedItems = prev?.items?.map((notif) =>

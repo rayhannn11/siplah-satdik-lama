@@ -54,7 +54,7 @@ const AccountPageNegotiationDetail = (props) => {
         dispatch({ type: FETCH_NEGOTIATION_DETAIL });
         const handleFetch = () => {
             customerApi
-                .getNegotiationDetail(id, customer.token)
+                .getNegotiationDetail(id, customer?.token)
                 .then((res) => {
                     const { data, status } = res;
                     if (Number(status.code) !== 200) return historyRoute.push("/account/negotiation");
@@ -66,11 +66,11 @@ const AccountPageNegotiationDetail = (props) => {
         handleFetch();
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [customer.token, id]);
+    }, [customer?.token, id]);
 
     const handleFetch = () => {
         customerApi
-            .getNegotiationDetail(id, customer.token)
+            .getNegotiationDetail(id, customer?.token)
             .then((res) => {
                 const { data } = res;
 
@@ -92,7 +92,7 @@ const AccountPageNegotiationDetail = (props) => {
                 resolve();
             } else {
                 customerApi
-                    .sendNegotiationResponse({ ...req, negoId: state.negotiationDetail.id }, customer.token)
+                    .sendNegotiationResponse({ ...req, negoId: state.negotiationDetail.id }, customer?.token)
                     .then((res) => {
                         setSendRequest(false);
                         toast.success("Tanggapan anda terkirim");
@@ -117,7 +117,7 @@ const AccountPageNegotiationDetail = (props) => {
             reverseButtons: true,
         }).then((result) => {
             if (result.isConfirmed) {
-                customerApi.rejectNego({ negoId: id }, customer.token).then((res) => {
+                customerApi.rejectNego({ negoId: id }, customer?.token).then((res) => {
                     handleFetch();
                 });
             }
@@ -129,13 +129,13 @@ const AccountPageNegotiationDetail = (props) => {
         if (isNego) {
             return cartAddItem(
                 { id: productId, name },
-                customer.token,
+                customer?.token,
                 qty,
                 id,
                 history[history.length - 1].priceResponse
             );
         } else {
-            return cartAddItem({ id: productId, name }, customer.token, qty);
+            return cartAddItem({ id: productId, name }, customer?.token, qty);
         }
     };
 
@@ -152,7 +152,7 @@ const AccountPageNegotiationDetail = (props) => {
                 reverseButtons: true,
             }).then((result) => {
                 if (result.isConfirmed) {
-                    customerApi.dealNego({ negoId: id }, customer.token).then((res) => {
+                    customerApi.dealNego({ negoId: id }, customer?.token).then((res) => {
                         handleFetch();
                         resolve();
                     });
@@ -192,7 +192,6 @@ const AccountPageNegotiationDetail = (props) => {
         isNegoReject,
         history,
     } = state.negotiationDetail;
-
 
     const renderStatus = () => {
         let content;

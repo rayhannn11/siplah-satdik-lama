@@ -162,6 +162,7 @@ const ModalNego = (props) => {
 
     console.log(state.qty);
     console.log(state, "state");
+    console.log(config, "config");
 
     return (
         <>
@@ -307,7 +308,38 @@ const ModalNego = (props) => {
                                     )}
                                 </div>
                             </div>
-                            {config?.map((item) => (
+                            {config?.length > 0 &&
+                                config.map((item) => (
+                                    <div className="col-md-6" key={item?.value}>
+                                        <div className="form-group">
+                                            <label htmlFor={item?.value}>{item?.name}</label>
+                                            <select
+                                                required
+                                                className="form-control"
+                                                name={item?.value}
+                                                id={item?.value}
+                                                value={
+                                                    state[item?.value] ??
+                                                    (Array.isArray(item?.items) && item.items.length > 0
+                                                        ? item.items[0].value
+                                                        : "")
+                                                }
+                                                onChange={(e) => {
+                                                    const value = e.target.value;
+                                                    setState((prev) => ({ ...prev, [item.value]: value }));
+                                                }}
+                                            >
+                                                {item?.items?.map((subItem) => (
+                                                    <option key={subItem?.value} value={subItem?.value}>
+                                                        {subItem?.name}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                    </div>
+                                ))}
+
+                            {/* {config?.map((item) => (
                                 <div className="col-md-6" key={item?.value}>
                                     <div className="form-group">
                                         <label htmlFor={item?.value}>{item?.name}</label>
@@ -316,7 +348,7 @@ const ModalNego = (props) => {
                                             className="form-control"
                                             name={item?.value}
                                             id={item?.value}
-                                            value={state[item?.value] ?? item?.items?.[0]?.value} // ⬅️ default langsung ke index pertama
+                                            value={state[item?.value] ?? item?.items?.[0]?.value}
                                             onChange={(e) =>
                                                 setState((prev) => ({ ...prev, [item.value]: e.target.value }))
                                             }
@@ -329,7 +361,7 @@ const ModalNego = (props) => {
                                         </select>
                                     </div>
                                 </div>
-                            ))}
+                            ))} */}
 
                             <div className="col-12">
                                 <div className="form-group">

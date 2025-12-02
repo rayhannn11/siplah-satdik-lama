@@ -219,7 +219,7 @@ function ShopProducts(props) {
         let canceled = false;
         dispatch({ type: "FETCH_PRODUCTS_LIST" });
         shopApi
-            .getProducts({ ...state.options }, { ...state.filters }, slug, categoryId, customer.token)
+            .getProducts({ ...state.options }, { ...state.filters }, slug, categoryId, customer?.token)
             .then((result) => {
                 const { data } = result;
                 if (canceled) {
@@ -240,7 +240,7 @@ function ShopProducts(props) {
             canceled = true;
         };
         //eslint-disable-next-line
-    }, [dispatch, slug, store, categoryId, state.categoryName, state.options, state.filters, customer.token]);
+    }, [dispatch, slug, store, categoryId, state.categoryName, state.options, state.filters, customer?.token]);
 
     if (state.productsListIsLoading && !state.productsList) {
         return <BlockLoader />;

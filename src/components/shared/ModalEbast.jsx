@@ -472,7 +472,7 @@ const ModalEbast = (props) => {
                     title: "Validasi BAST Gagal",
                     text: "Harap isi qty dan upload foto terlebih dahulu",
                     icon: "warning",
-                    confirmButtonText: "OK"
+                    confirmButtonText: "OK",
                 });
                 return;
             }
@@ -554,7 +554,7 @@ const ModalEbast = (props) => {
                         title: "Validasi BAST Gagal",
                         text: "Harap isi qty dan upload foto terlebih dahulu",
                         icon: "warning",
-                        confirmButtonText: "OK"
+                        confirmButtonText: "OK",
                     });
                     return;
                 }

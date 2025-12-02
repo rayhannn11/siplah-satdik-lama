@@ -31,11 +31,11 @@ function ProductCard(props) {
     } = props;
     let zone = "";
     console.log(product, "compare");
-
+    zone = customer?.school?.location?.zone ?? null;
     // console.log(product.ppnTagItem);
-    if (Object.keys(customer).length > 0) {
-        zone = customer?.school?.location?.zone;
-    }
+    // if (Object.keys(customer).length > 0) {
+    //     zone = customer?.school?.location?.zone;
+    // }
 
     const containerClasses = classNames("product-card", {
         "product-card--layout--grid product-card--size--sm": layout === "grid-sm",
@@ -85,8 +85,8 @@ function ProductCard(props) {
     }
 
     const handleAddCart = () => {
-        if (customer.token !== undefined && customer.token !== "") {
-            return cartAddItem(product, customer.token);
+        if (customer?.token !== undefined && customer?.token !== "") {
+            return cartAddItem(product, customer?.token);
         } else {
             return new Promise((resolve) => {
                 props.history.push("/login");
@@ -114,7 +114,7 @@ function ProductCard(props) {
         <div className={containerClasses}>
             {forAct !== "compare" && (
                 <AsyncAction
-                    action={() => quickviewOpen(product.slug, product.mall.id, customer.token)}
+                    action={() => quickviewOpen(product.slug, product.mall.id, customer?.token)}
                     render={({ run, loading }) => (
                         <button
                             type="button"
@@ -250,7 +250,7 @@ function ProductCard(props) {
                             {/* Nego */}
                             {/* {product.price.primary >= 50000000 ? (
                                 <AsyncAction
-                                    action={() => quickviewOpen(product.slug, product.mall.id, customer.token)}
+                                    action={() => quickviewOpen(product.slug, product.mall.id, customer?.token)}
                                     render={({ run, loading }) => (
                                         <button
                                             type="button"
@@ -266,7 +266,7 @@ function ProductCard(props) {
                                 />
                             ) : (
                                 <AsyncAction
-                                    action={() => quickviewOpen(product.slug, product.mall.id, customer.token)}
+                                    action={() => quickviewOpen(product.slug, product.mall.id, customer?.token)}
                                     render={({ run, loading }) => (
                                         <button
                                             type="button"

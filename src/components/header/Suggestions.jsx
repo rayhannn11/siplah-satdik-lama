@@ -18,8 +18,8 @@ const Suggestions = React.memo((props) => {
     const rootClasses = classNames(`suggestions suggestions--location--${context}`, className);
 
     const handleAddCart = (product) => {
-        if (customer.token !== undefined && customer.token !== "") {
-            return cartAddItem(product, customer.token);
+        if (customer?.token !== undefined && customer?.token !== "") {
+            return cartAddItem(product, customer?.token);
         } else {
             return new Promise((resolve) => {
                 // window.open("https://sso.datadik.kemdikbud.go.id/app/3D1C4271-7C02-487E-B330-7294B7EB4564", "_self");
