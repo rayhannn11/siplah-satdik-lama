@@ -81,10 +81,35 @@ const ModalNego = (props) => {
         }
     }, [config]);
 
+    function floorExcelLike(number) {
+        const rounded = Math.round((number + Number.EPSILON) * 100) / 100;
+        return Math.floor(rounded);
+    }
+
+    function floorExcelLikeDppNilaiLain(value) {
+        return Math.floor(value + 0.00001);
+    }
     const doHandleSend = () => {
         let productId = product?.id;
-        let req = { ...state, productId, priceNego: priceNego.floatValue, mallId: product?.mall?.id };
-        console.log(req);
+        let hargaSatuan = priceNego?.floatValue ?? 0;
+
+        // --- PERHITUNGAN ---
+        const payloadDpp = floorExcelLike(hargaSatuan / 1.11);
+        const payloadDppNilaiLain = floorExcelLikeDppNilaiLain((11 / 12) * (hargaSatuan / 1.11));
+        const payloadPpn = Math.ceil((hargaSatuan / 1.11) * (11 / 12) * 0.12);
+
+        // --- BUILD REQUEST ---
+        let req = {
+            ...state,
+            productId,
+            mallId: product?.mall?.id,
+            priceNego: hargaSatuan,
+
+            dpp: payloadDpp,
+            dppNilaiLain: payloadDppNilaiLain,
+            ppn: payloadPpn,
+        };
+        console.log(req, "payload");
         if (forAct === "compare") {
             req.productId = product?.productId;
             req.isCompare = agree;

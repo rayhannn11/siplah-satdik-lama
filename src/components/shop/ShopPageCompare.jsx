@@ -280,7 +280,7 @@ function ShopPageCompare(props) {
                 id_compare_new: item.id,
             };
 
-            const response = await fetch("https://siplah.eurekabookhouse.co.id/staging/checkout/updateCompare", {
+            const response = await fetch("https://siplah.eurekabookhouse.co.id/api/checkout/updateCompare", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

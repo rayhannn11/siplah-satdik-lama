@@ -1,14 +1,15 @@
 /*
 // .address-card
 */
-@import '../variables';
-@import '../functions';
-@import '../mixins/direction';
-
+@import "../variables";
+@import "../functions";
+@import "../mixins/direction";
 
 .address-card {
     position: relative;
+    overflow: visible; // ⬅️ penting
 }
+
 .address-card__badge {
     position: absolute;
     background-color: $accent-color;
@@ -20,7 +21,7 @@
     top: -$card-border-width;
 
     @include direction {
-        #{$inset-inline-end}: .75rem;
+        #{$inset-inline-end}: 0.75rem;
         #{$border-end-start-radius}: 2px;
         #{$border-end-end-radius}: 2px;
     }
@@ -32,6 +33,7 @@
 .address-card__body {
     padding: 1.5rem;
     font-size: 15px;
+    padding-top: 2.75rem;
     line-height: 18px;
 }
 .address-card__name {
@@ -40,7 +42,7 @@
     margin-bottom: 1.125rem;
 }
 .address-card__row + .address-card__row {
-    margin-top: .75rem;
+    margin-top: 0.75rem;
 }
 .address-card__row-title {
     font-size: 12px;
@@ -50,7 +52,6 @@
     margin-top: 1.625rem;
 }
 
-
 .address-card--featured {
     .address-card__body {
         padding: 2rem;
@@ -58,7 +59,6 @@
     .address-card__name {
         font-weight: $font-weight-bold;
     }
-
 
     @media (min-width: breakpoint(md-start)) and (max-width: breakpoint(md-end)) {
         .address-card__body {

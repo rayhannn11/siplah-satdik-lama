@@ -43,7 +43,9 @@ const Root = (props) => {
     });
 
     useEffect(() => {
-        const TRACKING_ID = "UA-141902938-1"; // YOUR_OWN_TRACKING_ID
+        //G-2483JRSEM4
+        //UA-141902938-1
+        const TRACKING_ID = "G-2483JRSEM4"; // YOUR_OWN_TRACKING_ID
         ReactGA.initialize(TRACKING_ID);
     }, []);
 
@@ -131,83 +133,83 @@ const Root = (props) => {
         }
     }, [localStorage.getItem("token")]);
 
-    // useEffect(() => {
-    //     customerApi.getOauth().then((res) => {
-    //         const token = res.data;
-    //         if (res.status.code === 200) {
-    //             setIsLoading(true);
-    //             customerApi.getMiniCart(token).then((res) => {
-    //                 const { data } = res;
-    //                 props.addMiniCart(data);
-    //             });
+    useEffect(() => {
+        customerApi.getOauth().then((res) => {
+            const token = res.data;
+            if (res.status.code === 200) {
+                setIsLoading(true);
+                customerApi.getMiniCart(token).then((res) => {
+                    const { data } = res;
+                    props.addMiniCart(data);
+                });
 
-    //             customerApi.getCustomer(res.data).then((res) => {
-    //                 const { data } = res;
+                customerApi.getCustomer(res.data).then((res) => {
+                    const { data } = res;
 
-    //                 console.log(data);
+                    console.log(data);
 
-    //                 // Simpan semua data yang diperlukan ke localStorage
-    //                 localStorage.setItem("auth", "true");
-    //                 localStorage.setItem("token", token);
-    //                 localStorage.setItem("userData", JSON.stringify(data));
+                    // Simpan semua data yang diperlukan ke localStorage
+                    localStorage.setItem("auth", "true");
+                    localStorage.setItem("token", token);
+                    localStorage.setItem("userData", JSON.stringify(data));
 
-    //                 setIsLoading(false);
-    //                 props.loginCustomer(true);
-    //                 props.customerAdd({ ...data, token });
+                    setIsLoading(false);
+                    props.loginCustomer(true);
+                    props.customerAdd({ ...data, token });
 
-    //                 if (data.totalNotifReminder > 0 && props.firstLogin) {
-    //                     Swal.fire({
-    //                         icon: "info",
-    //                         html: `<p>Anda memiliki <strong>${data.totalNotifReminder} notifikasi</strong> yang perlu dibaca</p>`,
-    //                         confirmButtonText: "Buka Notifikasi",
-    //                         confirmButtonColor: "#0e336d",
-    //                         allowOutsideClick: false,
-    //                         showCancelButton: true,
-    //                     }).then((res) => {
-    //                         if (res.isConfirmed) {
-    //                             props.handleChangeFirstLogin();
-    //                             props.openNotif();
-    //                             window.location.reload();
-    //                         }
-    //                     });
-    //                 } else if (data.totalNotifReminder < 1) {
-    //                     props.handleChangeFirstLogin();
-    //                 }
+                    if (data.totalNotifReminder > 0 && props.firstLogin) {
+                        Swal.fire({
+                            icon: "info",
+                            html: `<p>Anda memiliki <strong>${data.totalNotifReminder} notifikasi</strong> yang perlu dibaca</p>`,
+                            confirmButtonText: "Buka Notifikasi",
+                            confirmButtonColor: "#0e336d",
+                            allowOutsideClick: false,
+                            showCancelButton: true,
+                        }).then((res) => {
+                            if (res.isConfirmed) {
+                                props.handleChangeFirstLogin();
+                                props.openNotif();
+                                window.location.reload();
+                            }
+                        });
+                    } else if (data.totalNotifReminder < 1) {
+                        props.handleChangeFirstLogin();
+                    }
 
-    //                 var formdata = new FormData();
-    //                 formdata.append("customerId", data.id);
+                    var formdata = new FormData();
+                    formdata.append("customerId", data.id);
 
-    //                 var requestOptions = {
-    //                     method: "POST",
-    //                     headers: new Headers(),
-    //                     body: formdata,
-    //                     redirect: "follow",
-    //                 };
+                    var requestOptions = {
+                        method: "POST",
+                        headers: new Headers(),
+                        body: formdata,
+                        redirect: "follow",
+                    };
 
-    //                 fetch(`${process.env.REACT_APP_URL_SIPLAH}/backendseller/Mychat/welcome`, requestOptions).then(
-    //                     (response) => {}
-    //                 );
-    //             });
-    //         } else if (res.status.code === 403 || !res.status.code === 200) {
-    //             // Bersihkan localStorage dan state
-    //             localStorage.removeItem("auth");
-    //             localStorage.removeItem("token");
-    //             localStorage.removeItem("userData");
+                    fetch(`${process.env.REACT_APP_URL_SIPLAH}/backendseller/Mychat/welcome`, requestOptions).then(
+                        (response) => {}
+                    );
+                });
+            } else if (res.status.code === 403 || !res.status.code === 200) {
+                // Bersihkan localStorage dan state
+                localStorage.removeItem("auth");
+                localStorage.removeItem("token");
+                localStorage.removeItem("userData");
 
-    //             props.customerAdd({});
-    //             props.resetMiniCart();
-    //             props.loginCustomer({
-    //                 type: AUTH,
-    //                 auth: false,
-    //                 isLogout: true,
-    //             });
+                props.customerAdd({});
+                props.resetMiniCart();
+                props.loginCustomer({
+                    type: AUTH,
+                    auth: false,
+                    isLogout: true,
+                });
 
-    //             if (res.status.code === 403) {
-    //                 toast.error(res.status.message);
-    //             }
-    //         }
-    //     });
-    // }, []);
+                if (res.status.code === 403) {
+                    toast.error(res.status.message);
+                }
+            }
+        });
+    }, []);
 
     // Test Token
     useEffect(() => {

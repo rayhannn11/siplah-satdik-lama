@@ -1228,8 +1228,9 @@ function AccountPageOrderDetails(props) {
         "bank_bpd_va_bali",
         "bank_bpd_va_dki",
         "bank_bpd_va_bjb",
-        "bank_bsi_va",
+        // "bank_bsi_va",
         "bank_ntt_va",
+        "bank_bpd_va_jatim",
     ];
 
     const formatMethod = (val) => val.replace(/_/g, " ").toUpperCase();
@@ -2115,7 +2116,7 @@ function AccountPageOrderDetails(props) {
                                         <div
                                             style={{
                                                 display: "grid",
-                                                gridTemplateColumns: "repeat(auto-fit, minmax(110px, 1fr))",
+                                                gridTemplateColumns: "repeat(4, 1fr)", // ⬅️ FIX 4 COLUMN
                                                 gap: "12px",
                                                 justifyItems: "center",
                                                 alignItems: "stretch",
@@ -2131,8 +2132,10 @@ function AccountPageOrderDetails(props) {
                                                     bank_bpd_va_bali: "/images/bank/bank_bpd_bali.png",
                                                     bank_bpd_va_dki: "/images/bank/bank_dki.png",
                                                     bank_bpd_va_bjb: "/images/bank/bank_bjb.jpg",
-                                                    bank_bsi_va: "/images/bank/bank_bsi.jpg",
+                                                    // bank_bsi_va: "/images/bank/bank_bsi.jpg",
                                                     bank_ntt_va: "/images/bank/bank_ntt.png",
+                                                    bank_bpd_va_jatim:
+                                                        "https://www.bankjatim.co.id/themes/bjtm07/assets/img/logo.png",
                                                 };
 
                                                 const isSelected = selectedChangePaymentMethod === method;
@@ -2321,14 +2324,14 @@ function AccountPageOrderDetails(props) {
                             </div>
                         )}
 
-                        <div className="card address-card address-card--featured mt-2">
+                        <div className="card address-card address-card--featured mt-2" style={{ height: "auto" }}>
                             <div className="address-card__body">
                                 <div className="address-card__badge address-card__badge--muted">Unduh Berkas</div>
-                                <div className="row justify-content-between align-items-center mt-2">
+                                <div className="row justify-content-between align-items-center mt-2 ">
                                     {downloadDocument.map((item) => (
                                         <div
                                             className={
-                                                item.name == "Draf Surat Pesanan" ? "col-md-12 mb-2" : "col-md-6 mb-2"
+                                                item.name == "Draf Surat Pesanan" ? "col-md-12 mb-2" : "col-md-6 mb-2 "
                                             }
                                         >
                                             <a
@@ -2336,7 +2339,7 @@ function AccountPageOrderDetails(props) {
                                                 href={validateUrl(item.value) ? item.value : ""}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                style={{ fontSize: "14px" }}
+                                                style={{ fontSize: "14px", height: "auto" }}
                                             >
                                                 {item.name}
                                             </a>

@@ -551,11 +551,12 @@ const ShopPageCheckout = (props) => {
                          <small className="border p-2 text-center btn btn-default" style={{width:"50%", height: 60, fontSize:13 }}  onClick={(val) => doHandleChangeSelect({value:"bank_bpd_va_jatim",name:"Virtual Account Bank Jatim"}, "paymentMethod")} > <img alt="logo siplah eureka" src="https://www.bankjatim.co.id/themes/bjtm07/assets/img/logo.png" style={{height:25}}></img> <br/> BANK JATIM</small>    */}
                         </div>
                     </div>
+                    {/* BSI */}
                     <div className="p-2 idVA">
                         <div className="d-flex mt-2">
                             <small
                                 className="border p-2 text-center btn btn-default"
-                                style={{ width: "50%", height: 60, marginRight: 10, fontSize: 13 }}
+                                style={{ width: "100%", height: 60, marginRight: 10, fontSize: 13 }}
                                 onClick={(val) =>
                                     doHandleChangeSelect(
                                         { value: "bank_sumsel_babel_va", name: "Virtual Account Bank Sumsel Babel" },
@@ -571,7 +572,7 @@ const ShopPageCheckout = (props) => {
                                 ></img>{" "}
                                 <br /> BANK SUMSEL BABEL
                             </small>
-                            <small
+                            {/* <small
                                 className="border p-2 text-center btn btn-default"
                                 style={{ width: "50%", height: 60, fontSize: 13 }}
                                 onClick={(val) =>
@@ -588,7 +589,7 @@ const ShopPageCheckout = (props) => {
                                     style={{ height: 25 }}
                                 ></img>{" "}
                                 <br /> BANK BSI
-                            </small>
+                            </small> */}
                         </div>
                     </div>
                 </div>
@@ -1320,6 +1321,75 @@ const ShopPageCheckout = (props) => {
             shippingCost,
             shippingCostCurrencyFormat,
         } = state.checkout;
+
+        // const adaStokKosong = state?.checkout?.cartSelected?.product.some((item) => Number(item.stock) === 0);
+
+        // if (true) {
+        //     Swal.fire({
+        //         html: `Kembali ke halaman keranjang dan melihat barang, jumlah barang, dan harga yang sudah disesuaikan dengan ketersediaan barang dan harga terbaru yang ada pada penyedia.`,
+        //         title: "Terdapat Update Stok dan Harga",
+        //         allowOutsideClick: false,
+        //         icon: "warning",
+        //         showCancelButton: true,
+        //         confirmButtonText: "Kembali ke Keranjang",
+        //         cancelButtonText: "Batalkan",
+        //     }).then((result) => {
+        //         if (result.dismiss === Swal.DismissReason.cancel) {
+        //             // Aksi jika tombol "Batalkan" diklik
+        //             customerApi.deleteAllCart(state.checkout.pratransakasiId, customer?.token).then((res) => {
+        //                 toast.success(`Produk berhasil dihapus dari keranjang`);
+        //                 props.history.push("/");
+        //                 customerApi.getMiniCart(customer?.token).then((res) => {
+        //                     const { data } = res;
+        //                     addMiniCart(data);
+        //                 });
+        //             });
+        //         } else if (result.isConfirmed) {
+        //             props.history.push("/shop/cart");
+        //         }
+        //     });
+        // } else {
+        //     console.log("Berhasil stock sama");
+        // }
+
+        // siniii cek stock
+        //         const adaStokKosong = state?.checkout?.cartSelected?.product.some((item) => Number(item.stock) === 0);
+
+        //         const outOfStockProducts = state?.checkout?.cartSelected?.product?.filter((p) => Number(p.stock) === 0);
+        //         console.log(outOfStockProducts, "outOfStockProducts");
+        //         // Buat HTML daftar produk
+        //         const outOfStockListHTML =
+        //             outOfStockProducts.length > 0
+        //                 ? `
+        //       <div style="text-align:left; margin-top:10px;">
+        //         <b>Produk berikut stoknya habis:</b>
+        //         <ul style="margin: 8px 0 0 18px; padding:0;">
+        //           ${outOfStockProducts?.map((p) => `<li><b>${p?.name}</b></li>`)?.join("")}
+        //         </ul>
+        //       </div>
+        //     `
+        //                 : "";
+
+        //         if (adaStokKosong) {
+        //             Swal.fire({
+        //                 title: "Terdapat Update Stok dan Harga",
+        //                 html: `
+        //     Kembali ke halaman keranjang dan melihat barang, jumlah barang, dan harga
+        //     yang sudah disesuaikan dengan ketersediaan barang dan harga terbaru yang ada pada penyedia.
+        //     ${outOfStockListHTML}
+        //   `,
+        //                 icon: "warning",
+        //                 allowOutsideClick: false,
+        //                 showCancelButton: false, // ❗ Cancel dihilangkan
+        //                 confirmButtonText: "Kembali ke Keranjang",
+        //             }).then((result) => {
+        //                 if (result.isConfirmed) {
+        //                     props.history.push("/shop/cart");
+        //                 }
+        //             });
+        //         } else {
+        //             console.log("Berhasil stock sama");
+        //         }
 
         console.log(state.checkout.grandTotalDppNilaiLain, "state.checkout");
 

@@ -80,20 +80,90 @@ function AccountPageDashboard(props) {
             </div>
             {/* order status */}
             <div className="container mt-2">
-                <div className="row" style={{ minWidth: "100%", fontSize: "18px" }}>
+                <div
+                    className="row"
+                    style={{
+                        minWidth: "100%",
+                        fontSize: "18px",
+                    }}
+                >
                     {state?.data?.total?.map((t, index) => (
-                        <div className={classNames("p-2 border col-3")}>
-                            <div className="d-flex flex-md-column flex-sm-row justify-content-center align-items-center">
-                                <div dangerouslySetInnerHTML={{ __html: t.icon }} />
-                                <div>
-                                    <small className="pl-1">{t.name}</small>
-                                    <span class="badge badge-primary ml-1">{t.value}</span>
+                        <div
+                            key={index}
+                            className="col-3 p-2"
+                            style={{
+                                borderRadius: "12px",
+                                background: "#ffffff",
+                                border: "1px solid #E5E7EB",
+                                boxShadow: "0px 2px 6px rgba(0,0,0,0.03)",
+                            }}
+                        >
+                            <div
+                                className="d-flex flex-md-column flex-sm-row justify-content-center align-items-center text-center"
+                                style={{
+                                    gap: "10px",
+                                    padding: "10px 0",
+                                }}
+                            >
+                                {/* ICON */}
+                                <div
+                                    dangerouslySetInnerHTML={{ __html: t.icon }}
+                                    style={{
+                                        fontSize: "30px",
+                                        color: "#6B7280", // gray-500 modern
+                                    }}
+                                />
+
+                                {/* TEXT SECTION */}
+                                <div style={{ lineHeight: "1.3" }}>
+                                    {/* NAME */}
+                                    <small
+                                        style={{
+                                            fontWeight: "600",
+                                            display: "block",
+                                            color: "#111827", // gray-900 modern
+                                        }}
+                                    >
+                                        {t.name}
+                                    </small>
+
+                                    {/* BADGE */}
+                                    <span
+                                        className="badge"
+                                        style={{
+                                            fontSize: "14px",
+                                            marginTop: "10px",
+                                            marginBottom: "6px",
+                                            padding: "7px 12px",
+                                            borderRadius: "6px",
+                                            background: "linear-gradient(135deg, #3B82F6 0%, #6366F1 100%)", // blue → indigo
+                                            color: "#ffffff",
+                                            fontWeight: "600",
+                                            letterSpacing: "0.3px",
+                                            display: "inline-block",
+                                        }}
+                                    >
+                                        {t.value}
+                                    </span>
+
+                                    {/* RP VALUE */}
+                                    <div
+                                        style={{
+                                            fontSize: "14px",
+                                            fontWeight: "600",
+                                            marginTop: "6px",
+                                            color: "#10B981",
+                                        }}
+                                    >
+                                        {t?.rupiah ?? "Rp0"}
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     ))}
                 </div>
             </div>
+
             {/* log aktifitas */}
             <div className="profile-card dashboard__profile mt-2 card">
                 <div className="card-header">
