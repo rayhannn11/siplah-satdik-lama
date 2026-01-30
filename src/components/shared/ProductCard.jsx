@@ -189,7 +189,7 @@ function ProductCard(props) {
                 </span>
 
                 <div className="font-weight-bold mt-2" style={{ fontSize: "11px", color: "#6c757d" }}>
-                    {product?.ppnType === "non" || product?.ppnTagItem === "" ? (
+                    {product?.ppnType === "non" ? (
                         <>
                             <div style={{ color: "#28A745" }}>Bebas Pajak</div>
                             <div>DPP Nilai Lain: Rp 0</div>

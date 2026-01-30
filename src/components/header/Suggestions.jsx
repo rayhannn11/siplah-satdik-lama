@@ -47,7 +47,7 @@ const Suggestions = React.memo((props) => {
                     : parseFloat(product.price.primary || 0);
 
             // Check if product is tax exempt (you may need to adjust this condition based on your actual data structure)
-            const isTaxExempt = product.taxExempt || product.isTaxExempt || !product.ppnTagItem || false;
+            const isTaxExempt = product.ppnType === "non";
 
             // PPN amount calculation
             const ppnAmount = isTaxExempt ? 0 : Math.ceil((price / 1.11) * 0.11);

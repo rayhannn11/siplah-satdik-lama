@@ -129,7 +129,7 @@ const ShopPageCheckoutArkas = (props) => {
     const [cekList, setCekList] = useState(false);
     const fromLocalStorage = localStorage.getItem("checkout_from");
 
-    const [sumberDana, setSumberDana] = useState({ label: "BOSP Reguler", value: "BOSREG2025" });
+    const [sumberDana, setSumberDana] = useState({ label: "BOSP Reguler", value: "BOSREG2026" });
     useEffect(() => {
         const fullUrl = window.location.href;
         const prMatch = fullUrl.match(/isInsurance=\d+\/([^\/]+)$/);
@@ -257,7 +257,7 @@ const ShopPageCheckoutArkas = (props) => {
             id: id_local,
             from: fromLocalStorage,
             shipping: "penyedia",
-            sourceOfFund: "BOSREG2025",
+            sourceOfFund: "BOSREG2026",
             wrapping: "Kardus dan Plastik",
             paymentMethod: "bank_bpd_va_dki",
             paymentDue: 1,
@@ -309,7 +309,7 @@ const ShopPageCheckoutArkas = (props) => {
                             onClick={(val) =>
                                 doHandleChangeSelect(
                                     { value: "bank_bri_va", name: "Virtual Account BRI (BRIVA)" },
-                                    "paymentMethod"
+                                    "paymentMethod",
                                 )
                             }
                         >
@@ -330,7 +330,7 @@ const ShopPageCheckoutArkas = (props) => {
                             onClick={(val) =>
                                 doHandleChangeSelect(
                                     { value: "bank_bpd_va_dki", name: "Virtual Account Bank DKI" },
-                                    "paymentMethod"
+                                    "paymentMethod",
                                 )
                             }
                         >
@@ -716,7 +716,7 @@ const ShopPageCheckoutArkas = (props) => {
         }
         let req = {
             isInsurance: false,
-            sourceOfFund: "BOSREG2025",
+            sourceOfFund: "BOSREG2026",
             wrapping: localStorage.getItem("wrapping"),
             paymentMethod: localStorage.getItem("payment"),
             paymentDue: localStorage.getItem("top"),
@@ -933,7 +933,7 @@ const ShopPageCheckoutArkas = (props) => {
                 confirmButtonText: "Lanjutkan Draf Pesanan",
             }).then((result) => {
                 if (result.isConfirmed) {
-                    doHandleChangeSelect({ label: "BOSP Reguler", value: "BOSREG2025" }, "sourceOfFund");
+                    doHandleChangeSelect({ label: "BOSP Reguler", value: "BOSREG2026" }, "sourceOfFund");
                     doHandleChangeSelect("Kardus dan Plastik", "wrapping");
                     doHandleChangeSelect(1, "paymentDue");
                     doCreateOrderArkas();
@@ -1046,7 +1046,7 @@ const ShopPageCheckoutArkas = (props) => {
                                                                             >
                                                                                 {item}
                                                                             </div>
-                                                                        )
+                                                                        ),
                                                                 )}
                                                             </>
                                                         ) : (
@@ -1296,16 +1296,16 @@ const ShopPageCheckoutArkas = (props) => {
                                                                 if (state.checkout.cartSelected.praSumberDana !== "") {
                                                                     setSumberDana(
                                                                         state.checkout.cartSelected.praSumberDana,
-                                                                        "sourceOfFund"
+                                                                        "sourceOfFund",
                                                                     );
                                                                     doHandleChangeSelect(
                                                                         state.checkout.cartSelected.praSumberDana,
-                                                                        "sourceOfFund"
+                                                                        "sourceOfFund",
                                                                     );
                                                                 } else {
                                                                     doHandleChangeSelect(
-                                                                        { label: "BOSP Reguler", value: "BOSREG2025" },
-                                                                        "sourceOfFund"
+                                                                        { label: "BOSP Reguler", value: "BOSREG2026" },
+                                                                        "sourceOfFund",
                                                                     );
                                                                 }
                                                                 setOpenPeringatan(!openPeringatan);
@@ -1316,7 +1316,7 @@ const ShopPageCheckoutArkas = (props) => {
                                                                 "btn btn-primary custome btn-md btn-block cart__checkout-button",
                                                                 {
                                                                     "btn-loading": loading,
-                                                                }
+                                                                },
                                                             )}
                                                         >
                                                             Lanjutkan Draf Surat Pesanan

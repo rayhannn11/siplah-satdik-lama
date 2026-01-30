@@ -139,13 +139,24 @@ const AccountPageOrders = (props) => {
     const [searchTerm, setSearchTerm] = useState("");
     const [stores, setStores] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-    const toggle = () => setModal(!modal);
+    const [searchDebounceTimer, setSearchDebounceTimer] = useState(null);
+    const toggle = () => {
+        setModal(!modal);
+        if (!modal) {
+            // Reset state when opening modal
+            setSearchTerm("");
+            setStores([]);
+            setSelectedStore(null);
+            setSelectedFile(null);
+        }
+    };
     const [selectedStore, setSelectedStore] = useState(null);
     const [total, setTotal] = useState("");
     const [selectedFile, setSelectedFile] = useState(null);
     const [uploadResult, setUploadResult] = useState(null);
     const [isUploading, setIsUploading] = useState(false);
     const [showResultModal, setShowResultModal] = useState(false);
+    const [noResultsFound, setNoResultsFound] = useState(false);
 
     let content;
 
@@ -169,26 +180,82 @@ const AccountPageOrders = (props) => {
         });
     }, [state.options, token]);
 
+    // Debounced search effect
     useEffect(() => {
-        if (modal) {
-            fetchCariProdut();
+        // Clear existing timer
+        if (searchDebounceTimer) {
+            clearTimeout(searchDebounceTimer);
         }
-    }, [modal, searchTerm]);
+
+        // Only search if there's a search term and modal is open
+        if (searchTerm.trim() && modal) {
+            setIsLoading(true);
+            setNoResultsFound(false);
+
+            const timer = setTimeout(() => {
+                fetchCariProdut();
+            }, 500); // 500ms debounce delay
+
+            setSearchDebounceTimer(timer);
+        } else {
+            setStores([]);
+            setNoResultsFound(false);
+        }
+
+        // Cleanup function
+        return () => {
+            if (searchDebounceTimer) {
+                clearTimeout(searchDebounceTimer);
+            }
+        };
+    }, [searchTerm, modal]);
 
     const fetchCariProdut = async () => {
-        setIsLoading(true);
         try {
-            const response = await storeApi.searchStore(searchTerm);
-            setStores(response.pagination.data);
+            const response = await fetch(
+                `https://siplahstagingapi.eurekagroup.id/v1/mitra/penyedia/get-cv?page=1&limit=10&keyword=${encodeURIComponent(searchTerm)}`,
+                {
+                    method: "GET",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    },
+                },
+            );
+
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+
+            const result = await response.json();
+
+            // Check if response has the expected structure
+            if (result && result.pagination && Array.isArray(result.pagination.data)) {
+                setStores(result.pagination.data);
+                setNoResultsFound(result.pagination.data.length === 0);
+            } else {
+                setStores([]);
+                setNoResultsFound(true);
+            }
         } catch (error) {
             console.error("Error fetching stores:", error);
+            setStores([]);
+            setNoResultsFound(true);
+        } finally {
+            setIsLoading(false);
         }
-        setIsLoading(false);
     };
 
     const handleSearchs = (e) => {
-        console.log(e);
-        setSearchTerm(e.target.value);
+        const value = e.target.value;
+        setSearchTerm(value);
+
+        // Reset stores when clearing search
+        if (!value.trim()) {
+            setStores([]);
+            setNoResultsFound(false);
+            setIsLoading(false);
+        }
     };
 
     // const handleEvent = (event, picker) => {
@@ -205,13 +272,13 @@ const AccountPageOrders = (props) => {
             }
 
             const response = await fetch(
-                `https://siplahstagingapi.eurekagroup.id/penyedia/createCV?mall_id=${selectedStore.mall_id}&total=${total}`,
+                `https://siplahstagingapi.eurekagroup.id/v1/mitra/penyedia/createCV?mall_id=${selectedStore.mall_id}&total=${total}`,
                 {
                     method: "GET",
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
-                }
+                },
             );
 
             if (!response.ok) throw new Error("Download gagal");
@@ -244,13 +311,13 @@ const AccountPageOrders = (props) => {
             }
 
             const response = await fetch(
-                `https://siplahstagingapi.eurekagroup.id/penyedia/cari-csv-product-mitra?mall_id=${selectedStore.mall_id}`,
+                `https://siplahstagingapi.eurekagroup.id/v1/mitra/penyedia/cari-csv-product-mitra?mall_id=${selectedStore.mall_id}`,
                 {
                     method: "GET",
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
-                }
+                },
             );
 
             if (!response.ok) throw new Error("Download gagal");
@@ -572,58 +639,113 @@ const AccountPageOrders = (props) => {
                         </a>
                     </div>
 
-                    <Modal isOpen={modal} toggle={toggle} className="modal-lg">
-                        <ModalHeader toggle={toggle} className="bg-primary text-white">
-                            <i className="fa fa-shopping-cart mr-2"></i>
-                            Pembelian Jumlah Banyak
+                    <Modal isOpen={modal} toggle={toggle} className="modal-lg" backdrop="static">
+                        <ModalHeader toggle={toggle} className="bg-primary text-white border-0">
+                            <div className="d-flex align-items-center">
+                                <i className="fa fa-shopping-cart mr-2"></i>
+                                <span className="font-weight-bold">Pembelian Jumlah Banyak</span>
+                            </div>
                         </ModalHeader>
-                        <ModalBody>
+                        <ModalBody className="p-4">
                             <div className="row">
+                                {/* Search Store Section */}
                                 <div className="col-md-6 mb-4">
-                                    <div className="card h-100">
+                                    <div className="card h-100 shadow-sm border-0">
                                         <div className="card-body">
-                                            <h5 className="card-title mb-3">
-                                                <i className="fa fa-search text-primary mr-2"></i>
-                                                Cari Toko/CV
+                                            <h5 className="card-title mb-3 d-flex align-items-center">
+                                                <div
+                                                    className="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center mr-2"
+                                                    style={{ width: "32px", height: "32px" }}
+                                                >
+                                                    <i className="fa fa-search" style={{ fontSize: "14px" }}></i>
+                                                </div>
+                                                <span className="font-weight-bold">Cari Toko/CV</span>
                                             </h5>
-                                            <div className="form-group position-relative">
-                                                <input
-                                                    type="text"
-                                                    className="form-control"
-                                                    placeholder="Masukkan nama toko atau CV..."
-                                                    value={searchTerm}
-                                                    onChange={handleSearchs}
-                                                />
 
+                                            <div className="form-group position-relative mb-4">
+                                                <div className="input-group">
+                                                    <div className="input-group-prepend">
+                                                        <span className="input-group-text bg-white border-right-0">
+                                                            <i className="fa fa-search text-muted"></i>
+                                                        </span>
+                                                    </div>
+                                                    <input
+                                                        type="text"
+                                                        className="form-control border-left-0 pl-0"
+                                                        placeholder="Ketik nama toko atau CV..."
+                                                        value={searchTerm}
+                                                        onChange={handleSearchs}
+                                                        style={{
+                                                            fontSize: "14px",
+                                                            boxShadow: "none",
+                                                        }}
+                                                    />
+                                                    {searchTerm && (
+                                                        <div className="input-group-append">
+                                                            <button
+                                                                className="btn btn-light border"
+                                                                type="button"
+                                                                onClick={() => {
+                                                                    setSearchTerm("");
+                                                                    setStores([]);
+                                                                    setNoResultsFound(false);
+                                                                }}
+                                                                style={{ borderLeft: "none" }}
+                                                            >
+                                                                <i className="fa fa-times text-muted"></i>
+                                                            </button>
+                                                        </div>
+                                                    )}
+                                                </div>
+
+                                                {/* Loading State */}
                                                 {isLoading && (
-                                                    <div className="text-center mt-2">
-                                                        <div className="spinner-border text-primary" role="status">
+                                                    <div className="text-center mt-3 py-4">
+                                                        <div
+                                                            className="spinner-border text-primary mb-2"
+                                                            role="status"
+                                                            style={{ width: "2.5rem", height: "2.5rem" }}
+                                                        >
                                                             <span className="sr-only">Loading...</span>
                                                         </div>
+                                                        <div className="text-muted small">Mencari toko...</div>
                                                     </div>
                                                 )}
 
+                                                {/* Search Results Dropdown */}
                                                 {!isLoading && stores.length > 0 && (
                                                     <div
-                                                        className="position-absolute w-100 mt-1 shadow-sm"
+                                                        className="position-absolute w-100 mt-2 shadow-lg"
                                                         style={{
-                                                            maxHeight: "300px",
+                                                            maxHeight: "320px",
                                                             overflowY: "auto",
                                                             background: "white",
-                                                            border: "1px solid #ddd",
-                                                            borderRadius: "4px",
+                                                            border: "1px solid #e0e0e0",
+                                                            borderRadius: "8px",
                                                             zIndex: 1000,
                                                         }}
                                                     >
-                                                        {stores.map((store) => (
+                                                        {stores.map((store, index) => (
                                                             <div
                                                                 key={store.mall_id}
-                                                                className="p-3 border-bottom hover-bg-light"
-                                                                style={{ cursor: "pointer" }}
+                                                                className={`p-3 ${
+                                                                    index !== stores.length - 1 ? "border-bottom" : ""
+                                                                }`}
+                                                                style={{
+                                                                    cursor: "pointer",
+                                                                    transition: "all 0.2s ease",
+                                                                }}
+                                                                onMouseEnter={(e) => {
+                                                                    e.currentTarget.style.backgroundColor = "#f8f9fa";
+                                                                }}
+                                                                onMouseLeave={(e) => {
+                                                                    e.currentTarget.style.backgroundColor = "white";
+                                                                }}
                                                                 onClick={() => {
                                                                     setSearchTerm(store.name);
                                                                     setSelectedStore(store);
                                                                     setStores([]);
+                                                                    setNoResultsFound(false);
                                                                 }}
                                                             >
                                                                 <div className="d-flex align-items-center">
@@ -631,185 +753,294 @@ const AccountPageOrders = (props) => {
                                                                         <img
                                                                             src={store.image}
                                                                             alt={store.name}
-                                                                            className="mr-3"
+                                                                            className="mr-3 rounded"
                                                                             style={{
-                                                                                width: "40px",
-                                                                                height: "40px",
+                                                                                width: "48px",
+                                                                                height: "48px",
                                                                                 objectFit: "cover",
+                                                                                border: "2px solid #f0f0f0",
                                                                             }}
                                                                         />
                                                                     ) : (
                                                                         <div
-                                                                            className="mr-3 bg-secondary text-white d-flex align-items-center justify-content-center"
+                                                                            className="mr-3 bg-gradient-primary text-white d-flex align-items-center justify-content-center rounded"
                                                                             style={{
-                                                                                width: "40px",
-                                                                                height: "40px",
-                                                                                borderRadius: "4px",
+                                                                                width: "48px",
+                                                                                height: "48px",
+                                                                                background:
+                                                                                    "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
                                                                             }}
                                                                         >
                                                                             <i className="fa fa-store"></i>
                                                                         </div>
                                                                     )}
-                                                                    <div>
-                                                                        <div className="font-weight-bold">
+                                                                    <div className="flex-grow-1">
+                                                                        <div className="font-weight-bold text-dark mb-1">
                                                                             {store.name}
                                                                         </div>
-                                                                        {/* <small className="text-muted">
-                                                                            ID: {store.mall_id}
-                                                                        </small> */}
+                                                                        {store.nama_bank && (
+                                                                            <small className="text-muted d-block">
+                                                                                <i className="fa fa-university mr-1"></i>
+                                                                                {store.nama_bank} - {store.atas_nama}
+                                                                            </small>
+                                                                        )}
                                                                     </div>
+                                                                    <i className="fa fa-chevron-right text-muted"></i>
                                                                 </div>
                                                             </div>
                                                         ))}
                                                     </div>
                                                 )}
-                                                {selectedStore && (
-                                                    <div className="mt-3 p-3 border rounded">
-                                                        <h6 className="font-weight-bold">Toko Terpilih:</h6>
+
+                                                {/* No Results */}
+                                                {!isLoading && noResultsFound && searchTerm.trim() && (
+                                                    <div className="alert alert-warning mt-3 mb-0">
                                                         <div className="d-flex align-items-center">
-                                                            {selectedStore.image ? (
-                                                                <img
-                                                                    src={selectedStore.image}
-                                                                    alt={selectedStore.name}
-                                                                    className="mr-3"
-                                                                    style={{
-                                                                        width: "50px",
-                                                                        height: "50px",
-                                                                        objectFit: "cover",
-                                                                    }}
-                                                                />
-                                                            ) : (
-                                                                <div
-                                                                    className="mr-3 bg-secondary text-white d-flex align-items-center justify-content-center"
-                                                                    style={{
-                                                                        width: "50px",
-                                                                        height: "50px",
-                                                                        borderRadius: "4px",
-                                                                    }}
-                                                                >
-                                                                    <i className="fa fa-store"></i>
-                                                                </div>
-                                                            )}
+                                                            <i className="fa fa-info-circle mr-2"></i>
                                                             <div>
-                                                                <div className="font-weight-bold">
-                                                                    {selectedStore.name}
-                                                                </div>
-                                                                {/* <small className="text-muted">
-                                                                    ID: {selectedStore.mall_id}
-                                                                </small> */}
+                                                                <strong>Tidak ada hasil</strong>
+                                                                <p className="mb-0 small">
+                                                                    Toko "{searchTerm}" tidak ditemukan
+                                                                </p>
                                                             </div>
                                                         </div>
-                                                        {/* <Button color="primary" className="mt-3" size="sm">
-                                                            <i className="fa fa-shopping-cart mr-1"></i>
-                                                            Pilih Toko Ini
-                                                        </Button> */}
                                                     </div>
                                                 )}
-
-                                                {/* { searchTerm && stores.length === 0 && (
-                                                    <div className="alert alert-warning mt-2">
-                                                        Tidak ada toko ditemukan
-                                                    </div>
-                                                )} */}
                                             </div>
+
+                                            {/* Selected Store Display */}
+                                            {selectedStore && (
+                                                <div
+                                                    className="mt-3 p-3 border rounded shadow-sm"
+                                                    style={{ backgroundColor: "#f8f9fa" }}
+                                                >
+                                                    <div className="d-flex justify-content-between align-items-start mb-2">
+                                                        <h6 className="font-weight-bold text-success mb-0">
+                                                            <i className="fa fa-check-circle mr-1"></i>
+                                                            Toko Terpilih
+                                                        </h6>
+                                                        <button
+                                                            className="btn btn-sm btn-outline-danger"
+                                                            onClick={() => {
+                                                                setSelectedStore(null);
+                                                                setSearchTerm("");
+                                                                setSelectedFile(null);
+                                                            }}
+                                                            style={{ padding: "2px 8px", fontSize: "12px" }}
+                                                        >
+                                                            <i className="fa fa-times"></i>
+                                                        </button>
+                                                    </div>
+                                                    <div className="d-flex align-items-center">
+                                                        {selectedStore.image ? (
+                                                            <img
+                                                                src={selectedStore.image}
+                                                                alt={selectedStore.name}
+                                                                className="mr-3 rounded"
+                                                                style={{
+                                                                    width: "60px",
+                                                                    height: "60px",
+                                                                    objectFit: "cover",
+                                                                    border: "2px solid #28a745",
+                                                                }}
+                                                            />
+                                                        ) : (
+                                                            <div
+                                                                className="mr-3 bg-success text-white d-flex align-items-center justify-content-center rounded"
+                                                                style={{
+                                                                    width: "60px",
+                                                                    height: "60px",
+                                                                }}
+                                                            >
+                                                                <i className="fa fa-store"></i>
+                                                            </div>
+                                                        )}
+                                                        <div>
+                                                            <div className="font-weight-bold text-dark">
+                                                                {selectedStore.name}
+                                                            </div>
+                                                            {selectedStore.nama_bank && (
+                                                                <small className="text-muted d-block">
+                                                                    <i className="fa fa-university mr-1"></i>
+                                                                    {selectedStore.nama_bank}
+                                                                </small>
+                                                            )}
+                                                            {selectedStore.nomor_rekening && (
+                                                                <small className="text-muted d-block">
+                                                                    <i className="fa fa-credit-card mr-1"></i>
+                                                                    {selectedStore.nomor_rekening} -{" "}
+                                                                    {selectedStore.atas_nama}
+                                                                </small>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
+
+                                {/* Template Section */}
                                 {selectedStore && (
                                     <div className="col-md-6 mb-4">
-                                        <div className="card h-100">
+                                        <div className="card h-100 shadow-sm border-0">
                                             <div className="card-body">
-                                                <h5 className="card-title mb-3">
-                                                    <i className="fa fa-file-excel text-success mr-2"></i>
-                                                    Template Excel
+                                                <h5 className="card-title mb-3 d-flex align-items-center">
+                                                    <div
+                                                        className="rounded-circle bg-success text-white d-flex align-items-center justify-content-center mr-2"
+                                                        style={{ width: "32px", height: "32px" }}
+                                                    >
+                                                        <i
+                                                            className="fa fa-file-excel"
+                                                            style={{ fontSize: "14px" }}
+                                                        ></i>
+                                                    </div>
+                                                    <span className="font-weight-bold">Template & Upload</span>
                                                 </h5>
-                                                <p className="text-muted mb-4">
-                                                    Download template Excel untuk memudahkan input data pembelian dalam
-                                                    jumlah banyak
-                                                </p>
-                                                <div className="mt-3 p-3 border rounded">
-                                                    <h6 className="font-weight-bold">
-                                                        Toko Terpilih: {selectedStore.name}
-                                                    </h6>
 
-                                                    {/* <div className="form-group mt-3">
-                                                        <label>Jumlah Barang yang ingin di order:</label>
-                                                        <input
-                                                            type="number"
-                                                            className="form-control"
-                                                            value={total}
-                                                            onChange={(e) => setTotal(e.target.value)}
-                                                            placeholder="Masukkan jumlah barang yang ingin di order"
-                                                            min="1"
-                                                        />
-                                                    </div> */}
+                                                <div className="alert alert-info border-0 mb-3">
+                                                    <small>
+                                                        <i className="fa fa-info-circle mr-1"></i>
+                                                        Download template, isi data produk, lalu upload kembali
+                                                    </small>
+                                                </div>
+
+                                                <div className="mb-3">
+                                                    <label className="font-weight-bold small text-muted mb-2">
+                                                        TOKO YANG DIPILIH
+                                                    </label>
+                                                    <div
+                                                        className="p-2 border rounded d-flex align-items-center"
+                                                        style={{ backgroundColor: "#f8f9fa" }}
+                                                    >
+                                                        <i className="fa fa-store text-primary mr-2"></i>
+                                                        <span className="font-weight-bold">{selectedStore.name}</span>
+                                                    </div>
+                                                </div>
+
+                                                <div className="d-grid gap-2">
+                                                    <input
+                                                        type="file"
+                                                        id="fileUpload"
+                                                        style={{ display: "none" }}
+                                                        onChange={handleFileChange}
+                                                        accept=".xlsx,.xls,.csv"
+                                                    />
+
+                                                    <Button
+                                                        color="warning"
+                                                        onClick={handleDownloadTemplate}
+                                                        className="mb-2 shadow-sm"
+                                                        block
+                                                    >
+                                                        <i className="fa fa-download mr-2"></i>
+                                                        Download Template CSV
+                                                    </Button>
+
+                                                    <Button
+                                                        color="info"
+                                                        onClick={handleDownloadTemplateKatalog}
+                                                        className="mb-3 shadow-sm"
+                                                        block
+                                                    >
+                                                        <i className="fa fa-download mr-2"></i>
+                                                        Download Katalog Produk
+                                                    </Button>
+
+                                                    {selectedFile ? (
+                                                        <div className="alert alert-success border-0 mb-0">
+                                                            <div className="d-flex justify-content-between align-items-center">
+                                                                <div className="d-flex align-items-center">
+                                                                    <i
+                                                                        className="fa fa-file-excel mr-2"
+                                                                        style={{ fontSize: "24px" }}
+                                                                    ></i>
+                                                                    <div>
+                                                                        <div className="font-weight-bold small">
+                                                                            {selectedFile.name}
+                                                                        </div>
+                                                                        <small className="text-muted">
+                                                                            {(selectedFile.size / 1024).toFixed(2)} KB
+                                                                        </small>
+                                                                    </div>
+                                                                </div>
+                                                                <button
+                                                                    onClick={(e) => {
+                                                                        e.preventDefault();
+                                                                        document.getElementById("fileUpload").click();
+                                                                    }}
+                                                                    className="btn btn-sm btn-outline-primary"
+                                                                >
+                                                                    <i className="fa fa-edit mr-1"></i>
+                                                                    Ganti
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    ) : (
+                                                        <Button
+                                                            color="success"
+                                                            onClick={() =>
+                                                                document.getElementById("fileUpload").click()
+                                                            }
+                                                            className="shadow-sm"
+                                                            block
+                                                        >
+                                                            <i className="fa fa-upload mr-2"></i>
+                                                            Upload File Pesanan
+                                                        </Button>
+                                                    )}
                                                 </div>
                                             </div>
-                                            <>
-                                                <input
-                                                    type="file"
-                                                    id="fileUpload"
-                                                    style={{ display: "none" }}
-                                                    onChange={handleFileChange}
-                                                    accept=".xlsx,.xls,.csv"
-                                                />
-                                                <Button color="warning" onClick={handleDownloadTemplate}>
-                                                    <i className="fa fa-download mr-1"></i>
-                                                    Download Template CSV
-                                                </Button>
-                                                <Button
-                                                    color="info"
-                                                    onClick={handleDownloadTemplateKatalog}
-                                                    className="mt-2"
-                                                >
-                                                    <i className="fa fa-download mr-1"></i>
-                                                    Download Katalog Product
-                                                </Button>
-
-                                                {selectedFile ? (
-                                                    <div className="mt-2 d-flex align-items-center">
-                                                        <span className="mr-2">
-                                                            <i className="fa fa-file mr-1" style={{ fontSize: 6 }}></i>
-                                                            {selectedFile.name}
-                                                        </span>
-                                                        <a
-                                                            href="#"
-                                                            onClick={(e) => {
-                                                                e.preventDefault();
-                                                                document.getElementById("fileUpload").click();
-                                                            }}
-                                                            className="text-danger"
-                                                        >
-                                                            <i className="fa fa-edit"></i> Ganti
-                                                        </a>
-                                                    </div>
-                                                ) : (
-                                                    <Button
-                                                        color="success"
-                                                        onClick={() => document.getElementById("fileUpload").click()}
-                                                        className="mt-2"
-                                                    >
-                                                        <i className="fa fa-upload mr-1"></i>
-                                                        Upload Template Order Produk
-                                                    </Button>
-                                                )}
-                                            </>
                                         </div>
                                     </div>
                                 )}
                             </div>
 
-                            <div className="alert alert-info mt-2">
-                                <i className="fa fa-info-circle mr-2"></i>
-                                Setelah mengisi template, Anda dapat mengunggah file Excel untuk memproses pembelian
-                                secara otomatis
-                            </div>
+                            {/* Info Alert */}
+                            {!selectedStore && (
+                                <div className="alert alert-primary border-0 mb-0">
+                                    <div className="d-flex align-items-start">
+                                        <i className="fa fa-lightbulb mr-2 mt-1"></i>
+                                        <div>
+                                            <strong>Cara Menggunakan:</strong>
+                                            <ol className="mb-0 pl-3 mt-2" style={{ fontSize: "14px" }}>
+                                                <li>Cari dan pilih toko/CV yang ingin Anda pesan</li>
+                                                <li>Download template CSV dan katalog produk</li>
+                                                <li>Isi template dengan kode produk dan jumlah yang diinginkan</li>
+                                                <li>Upload file yang sudah diisi</li>
+                                            </ol>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
                         </ModalBody>
-                        <ModalFooter>
+                        <ModalFooter className="border-top">
+                            <Button color="secondary" onClick={toggle} className="px-4">
+                                <i className="fa fa-times mr-1"></i>
+                                Batal
+                            </Button>
                             {selectedFile && (
-                                <Button color="success" onClick={functionUploadExcel}>
-                                    <i className="fa fa-check  mr-1"></i>
-                                    Upload
+                                <Button
+                                    color="success"
+                                    onClick={functionUploadExcel}
+                                    disabled={isUploading}
+                                    className="px-4 shadow-sm"
+                                >
+                                    {isUploading ? (
+                                        <>
+                                            <span
+                                                className="spinner-border spinner-border-sm mr-2"
+                                                role="status"
+                                                aria-hidden="true"
+                                            ></span>
+                                            Memproses...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <i className="fa fa-check mr-2"></i>
+                                            Proses Upload
+                                        </>
+                                    )}
                                 </Button>
                             )}
                         </ModalFooter>
@@ -946,7 +1177,7 @@ const AccountPageOrders = (props) => {
                                                 {uploadResult.data
                                                     .reduce(
                                                         (sum, item) => sum + parseInt(item.price) * item.qty_beli,
-                                                        0
+                                                        0,
                                                     )
                                                     .toLocaleString("id-ID")}
                                             </td>

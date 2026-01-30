@@ -2,6 +2,6 @@
  * Application version number
  * This should be incremented with each build/deployment
  */
-const version = 60;
+const version = 70;
 
 export default version;

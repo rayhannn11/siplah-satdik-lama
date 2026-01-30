@@ -263,7 +263,7 @@ class Product extends Component {
                                         <dd className="mb-0 ml-1">
                                             Rp
                                             {Math.ceil((product?.ppn?.dpp ?? 0 / 1.11) * (11 / 12)).toLocaleString(
-                                                "id-ID"
+                                                "id-ID",
                                             )}
                                             {/* {(
                                                 (11 / 12) *

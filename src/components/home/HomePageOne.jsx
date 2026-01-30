@@ -115,6 +115,10 @@ const HomePageOne = React.memo((props) => {
     const { profitUsing, aboutSiplah } = section;
     const slideImages = [
         {
+            url: "images/banner_mitra_baru.jpeg",
+            caption: "Slide 1",
+        },
+        {
             url: "images/banner_2024.jpeg",
             caption: "Slide 3",
         },

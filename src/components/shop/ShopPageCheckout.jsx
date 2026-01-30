@@ -136,7 +136,7 @@ const ShopPageCheckout = (props) => {
     const [kurirCost, setKurirCost] = useState(15000);
     const [pretransaction, setPreTransaction] = useState("");
 
-    const [sumberDana, setSumberDana] = useState({ label: "BOSP Reguler", value: "BOSREG2025" });
+    const [sumberDana, setSumberDana] = useState({ label: "BOSP Reguler", value: "BOSREG2026" });
     const [isLoadingBtn, setIsLoadingBtn] = useState(false);
 
     // State untuk modal pilihan sumber pembayaran
@@ -185,7 +185,7 @@ const ShopPageCheckout = (props) => {
                 kurirCost,
                 paymentMethodName,
                 paymentDue,
-                wrapping
+                wrapping,
             );
 
             console.log(res);
@@ -360,7 +360,7 @@ const ShopPageCheckout = (props) => {
             id: 91,
             from: fromLocalStorage,
             shipping: "penyedia",
-            sourceOfFund: "BOSREG2025",
+            sourceOfFund: "BOSREG2026",
             wrapping: "",
             paymentMethod: "bank_bpd_va_dki",
             paymentDue: "",
@@ -438,7 +438,7 @@ const ShopPageCheckout = (props) => {
                             onClick={(val) =>
                                 doHandleChangeSelect(
                                     { value: "bank_bri_va", name: "Virtual Account BRI (BRIVA)" },
-                                    "paymentMethod"
+                                    "paymentMethod",
                                 )
                             }
                         >
@@ -457,7 +457,7 @@ const ShopPageCheckout = (props) => {
                             onClick={(val) =>
                                 doHandleChangeSelect(
                                     { value: "bank_bpd_va_dki", name: "Virtual Account Bank DKI" },
-                                    "paymentMethod"
+                                    "paymentMethod",
                                 )
                             }
                         >
@@ -475,7 +475,7 @@ const ShopPageCheckout = (props) => {
                             onClick={(val) =>
                                 doHandleChangeSelect(
                                     { value: "bank_bpd_va_jatim", name: "Virtual Account Bank Jatim" },
-                                    "paymentMethod"
+                                    "paymentMethod",
                                 )
                             }
                         >
@@ -496,7 +496,7 @@ const ShopPageCheckout = (props) => {
                                 onClick={(val) =>
                                     doHandleChangeSelect(
                                         { value: "bank_bpd_va_bjb", name: "Virtual Account Bank BJB" },
-                                        "paymentMethod"
+                                        "paymentMethod",
                                     )
                                 }
                             >
@@ -517,7 +517,7 @@ const ShopPageCheckout = (props) => {
                                 onClick={(val) =>
                                     doHandleChangeSelect(
                                         { value: "bank_bpd_va_bali", name: "Virtual Account Bank BPD BALI" },
-                                        "paymentMethod"
+                                        "paymentMethod",
                                     )
                                 }
                             >
@@ -535,7 +535,7 @@ const ShopPageCheckout = (props) => {
                                 onClick={(val) =>
                                     doHandleChangeSelect(
                                         { value: "bank_sulselbar_va", name: "Virtual Account Bank Sulselbar" },
-                                        "paymentMethod"
+                                        "paymentMethod",
                                     )
                                 }
                             >
@@ -560,7 +560,7 @@ const ShopPageCheckout = (props) => {
                                 onClick={(val) =>
                                     doHandleChangeSelect(
                                         { value: "bank_sumsel_babel_va", name: "Virtual Account Bank Sumsel Babel" },
-                                        "paymentMethod"
+                                        "paymentMethod",
                                     )
                                 }
                             >
@@ -617,7 +617,7 @@ const ShopPageCheckout = (props) => {
                             onClick={(val) =>
                                 doHandleChangeSelect(
                                     { value: "bank_bpd_va", name: "Virtual Account BPD Jateng (BPDAja)" },
-                                    "paymentMethod"
+                                    "paymentMethod",
                                 )
                             }
                         >
@@ -635,7 +635,7 @@ const ShopPageCheckout = (props) => {
                             onClick={(val) =>
                                 doHandleChangeSelect(
                                     { value: "bank_bpd_va", name: "Virtual Account BPD Jateng (BPDAja)" },
-                                    "paymentMethod"
+                                    "paymentMethod",
                                 )
                             }
                         >
@@ -653,7 +653,7 @@ const ShopPageCheckout = (props) => {
                             onClick={(val) =>
                                 doHandleChangeSelect(
                                     { value: "bank_bpd_va", name: "Virtual Account BPD Jateng (BPDAja)" },
-                                    "paymentMethod"
+                                    "paymentMethod",
                                 )
                             }
                         >
@@ -672,7 +672,7 @@ const ShopPageCheckout = (props) => {
                             onClick={(val) =>
                                 doHandleChangeSelect(
                                     { value: "bank_bpd_va", name: "Virtual Account BPD Jateng (BPDAja) " },
-                                    "paymentMethod"
+                                    "paymentMethod",
                                 )
                             }
                         >
@@ -693,7 +693,7 @@ const ShopPageCheckout = (props) => {
                                 onClick={(val) =>
                                     doHandleChangeSelect(
                                         { value: "bank_bpd_va", name: "Virtual Account BPD Jateng (BPDAja)" },
-                                        "paymentMethod"
+                                        "paymentMethod",
                                     )
                                 }
                             >
@@ -711,7 +711,7 @@ const ShopPageCheckout = (props) => {
                                 onClick={(val) =>
                                     doHandleChangeSelect(
                                         { value: "bank_bpd_va", name: "Virtual Account BPD Jateng (BPDAja)" },
-                                        "paymentMethod"
+                                        "paymentMethod",
                                     )
                                 }
                             >
@@ -729,7 +729,7 @@ const ShopPageCheckout = (props) => {
                                 onClick={(val) =>
                                     doHandleChangeSelect(
                                         { value: "bank_bpd_va", name: "Virtual Account BPD Jateng (BPDAja)" },
-                                        "paymentMethod"
+                                        "paymentMethod",
                                     )
                                 }
                             >
@@ -751,7 +751,7 @@ const ShopPageCheckout = (props) => {
                                 onClick={(val) =>
                                     doHandleChangeSelect(
                                         { value: "bank_bpd_va", name: "Virtual Account BPD Jateng (BPDAja)" },
-                                        "paymentMethod"
+                                        "paymentMethod",
                                     )
                                 }
                             >
@@ -769,7 +769,7 @@ const ShopPageCheckout = (props) => {
                                 onClick={(val) =>
                                     doHandleChangeSelect(
                                         { value: "bank_ntt_va", name: "BPD Nusa Tenggara Timur " },
-                                        "paymentMethod"
+                                        "paymentMethod",
                                     )
                                 }
                             >
@@ -788,7 +788,7 @@ const ShopPageCheckout = (props) => {
                                 onClick={(val) =>
                                     doHandleChangeSelect(
                                         { value: "bank_bpd_va", name: "Virtual Account BPD Jateng (BPDAja)" },
-                                        "paymentMethod"
+                                        "paymentMethod",
                                     )
                                 }
                             >
@@ -827,7 +827,7 @@ const ShopPageCheckout = (props) => {
                                 onClick={(val) =>
                                     doHandleChangeSelect(
                                         { value: "bank_bpd_va", name: "Virtual Account BPD Jateng (BPDAja)" },
-                                        "paymentMethod"
+                                        "paymentMethod",
                                     )
                                 }
                             >
@@ -1418,8 +1418,8 @@ const ShopPageCheckout = (props) => {
                 item.ppn === 0
                     ? Number(item.price)
                     : item.isCrossPrice
-                    ? Math.floor(parseFloat(item?.priceCurrencyFormat.replace(/[^\d]/g, "")))
-                    : Math.floor(parseFloat(item?.priceCurrencyFormat.replace(/[^\d]/g, "")));
+                      ? Math.floor(parseFloat(item?.priceCurrencyFormat.replace(/[^\d]/g, "")))
+                      : Math.floor(parseFloat(item?.priceCurrencyFormat.replace(/[^\d]/g, "")));
             const dppPphFinalValue = dppPphValue * Number(item?.qty);
             return total + dppPphFinalValue;
         }, 0);
@@ -1551,7 +1551,7 @@ const ShopPageCheckout = (props) => {
                                                                             >
                                                                                 {item}
                                                                             </div>
-                                                                        )
+                                                                        ),
                                                                 )}
                                                             </>
                                                         ) : (
@@ -1924,20 +1924,20 @@ const ShopPageCheckout = (props) => {
                                                                                     onClick={() => {
                                                                                         if (state.checkout.isWarning) {
                                                                                             setOpenPeringatanArkas(
-                                                                                                !openPeringatanArkas
+                                                                                                !openPeringatanArkas,
                                                                                             );
                                                                                         } else {
                                                                                             setOpenPeraturan(
-                                                                                                !openPeraturan
+                                                                                                !openPeraturan,
                                                                                             );
                                                                                         }
                                                                                         doHandleChangeSelect(
                                                                                             sumberDana,
-                                                                                            "sourceOfFund"
+                                                                                            "sourceOfFund",
                                                                                         );
                                                                                         console.log(
                                                                                             "sumberDana:",
-                                                                                            sumberDana
+                                                                                            sumberDana,
                                                                                         );
                                                                                     }}
                                                                                     title="Buat Pesanan baru"
@@ -1946,7 +1946,7 @@ const ShopPageCheckout = (props) => {
                                                                                         "btn btn-primary custome btn-md btn-block cart__checkout-button",
                                                                                         {
                                                                                             "btn-loading": loading,
-                                                                                        }
+                                                                                        },
                                                                                     )}
                                                                                 >
                                                                                     Lanjutkan Pemetaan Pesanan
@@ -1977,21 +1977,21 @@ const ShopPageCheckout = (props) => {
 
                                                                                         if (state.checkout.isWarning) {
                                                                                             setOpenPeringatanArkas(
-                                                                                                !openPeringatanArkas
+                                                                                                !openPeringatanArkas,
                                                                                             );
                                                                                         } else {
                                                                                             setOpenPeraturan(
-                                                                                                !openPeraturan
+                                                                                                !openPeraturan,
                                                                                             );
                                                                                         }
                                                                                         //    setOpenPeringatan(!openPeringatan);
                                                                                         doHandleChangeSelect(
                                                                                             sumberDana,
-                                                                                            "sourceOfFund"
+                                                                                            "sourceOfFund",
                                                                                         );
                                                                                         console.log(
                                                                                             "sumberDana:",
-                                                                                            sumberDana
+                                                                                            sumberDana,
                                                                                         );
                                                                                     }}
                                                                                     title="Buat Pesanan baru"
@@ -2000,7 +2000,7 @@ const ShopPageCheckout = (props) => {
                                                                                         "btn btn-primary custome btn-md btn-block cart__checkout-button",
                                                                                         {
                                                                                             "btn-loading": loading,
-                                                                                        }
+                                                                                        },
                                                                                     )}
                                                                                 >
                                                                                     Buat Pesanan Baru
@@ -2014,20 +2014,20 @@ const ShopPageCheckout = (props) => {
                                                                                 onClick={() => {
                                                                                     if (state.checkout.isWarning) {
                                                                                         setOpenPeringatanArkas(
-                                                                                            !openPeringatanArkas
+                                                                                            !openPeringatanArkas,
                                                                                         );
                                                                                     } else {
                                                                                         setOpenPeraturan(
-                                                                                            !openPeraturan
+                                                                                            !openPeraturan,
                                                                                         );
                                                                                     }
                                                                                     doHandleChangeSelect(
                                                                                         sumberDana,
-                                                                                        "sourceOfFund"
+                                                                                        "sourceOfFund",
                                                                                     );
                                                                                     console.log(
                                                                                         "sumberDana:",
-                                                                                        sumberDana
+                                                                                        sumberDana,
                                                                                     );
                                                                                 }}
                                                                                 title="Buat Pesanan baru"
@@ -2036,7 +2036,7 @@ const ShopPageCheckout = (props) => {
                                                                                     "btn btn-primary custome btn-md btn-block cart__checkout-button",
                                                                                     {
                                                                                         "btn-loading": loading,
-                                                                                    }
+                                                                                    },
                                                                                 )}
                                                                             >
                                                                                 Lanjutkan Pemetaan Pesanan
@@ -2064,7 +2064,7 @@ const ShopPageCheckout = (props) => {
                                                                                 type="button"
                                                                                 title="Buat Pesanan baru"
                                                                                 className={classNames(
-                                                                                    "btn btn-defaut custome btn-md btn-block cart__checkout-button"
+                                                                                    "btn btn-defaut custome btn-md btn-block cart__checkout-button",
                                                                                 )}
                                                                                 style={{
                                                                                     borderRadius: "5px",
@@ -2087,7 +2087,7 @@ const ShopPageCheckout = (props) => {
                                                                         type="button"
                                                                         title="Buat Pesanan baru"
                                                                         className={classNames(
-                                                                            "btn btn-defaut custome btn-md btn-block cart__checkout-button"
+                                                                            "btn btn-defaut custome btn-md btn-block cart__checkout-button",
                                                                         )}
                                                                         style={{
                                                                             borderRadius: "5px",

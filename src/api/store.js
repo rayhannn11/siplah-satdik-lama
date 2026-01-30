@@ -80,7 +80,7 @@ const storeApi = {
         const formdata = new FormData();
         formdata.append("file", file);
         formdata.append("mall_id", mall_id);
-        return fetch(`https://siplahstagingapi.eurekagroup.id/penyedia/uploadCSV`, {
+        return fetch(`https://siplahstagingapi.eurekagroup.id/v1/mitra/penyedia/uploadCSV`, {
             method: "POST",
             body: formdata,
         }).then((res) => res.json());
