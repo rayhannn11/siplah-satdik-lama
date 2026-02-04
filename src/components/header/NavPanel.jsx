@@ -63,6 +63,7 @@ function NavPanel(props) {
                                 width: "100%",
                                 marginRight: "20px",
                                 flexGrow: 0,
+                                opacity: "0.7",
                             }}
                         >
                             <Search context="header" />

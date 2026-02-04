@@ -894,7 +894,7 @@ function AccountPageOrderDetails(props) {
 
             // Validasi: pastikan tidak ada produk dengan qty_terima_baik dan qty_terima_buruk sama-sama 0
             const invalidProducts = products.filter(
-                (product) => product.qty_terima_baik === 0 && product.qty_terima_buruk === 0
+                (product) => product.qty_terima_baik === 0 && product.qty_terima_buruk === 0,
             );
 
             if (invalidProducts.length > 0) {
@@ -945,7 +945,7 @@ function AccountPageOrderDetails(props) {
                     .map((ebastItem) => {
                         // Cari item asli dari transactionDetail.items berdasarkan orderProductId
                         const originalItem = state.transactionDetail.items.find(
-                            (item) => item.orderProductId === ebastItem.orderProductId
+                            (item) => item.orderProductId === ebastItem.orderProductId,
                         );
 
                         if (!originalItem) {
@@ -1381,7 +1381,7 @@ function AccountPageOrderDetails(props) {
         ];
 
         const matchedDoc = documents?.find((doc) =>
-            paymentMethodSelected?.label?.toLowerCase()?.includes(doc.toLowerCase())
+            paymentMethodSelected?.label?.toLowerCase()?.includes(doc.toLowerCase()),
         );
 
         const handleViewAndDownload = (docName) => {
@@ -2171,7 +2171,7 @@ function AccountPageOrderDetails(props) {
                                                                           window.location.pathname.split("/")[1]
                                                                               ? `/${
                                                                                     window.location.pathname.split(
-                                                                                        "/"
+                                                                                        "/",
                                                                                     )[1]
                                                                                 }`
                                                                               : ""
@@ -2224,7 +2224,7 @@ function AccountPageOrderDetails(props) {
                                         {!billingDetail?.virtualAccountNumber
                                             ?.toLowerCase()
                                             ?.includes(
-                                                "nomor va akan muncul setelah ebast terisi dan klik lanjut ke proses pembayaran"
+                                                "nomor va akan muncul setelah ebast terisi dan klik lanjut ke proses pembayaran",
                                             ) && (
                                             <span
                                                 onClick={() => setOpenVa(!openVa)}
@@ -2347,7 +2347,7 @@ function AccountPageOrderDetails(props) {
                                     ))}
                                     {isProofPayment && (
                                         <>
-                                            <div className="col-md-6 mb-2">
+                                            {/* <div className="col-md-6 mb-2">
                                                 <a
                                                     className="btn btn-dark custom btn-block"
                                                     href={proofPayment}
@@ -2357,7 +2357,7 @@ function AccountPageOrderDetails(props) {
                                                 >
                                                     Cetak Bukti Bayar
                                                 </a>
-                                            </div>
+                                            </div> */}
                                             <div className="col-md-6 mb-2">
                                                 <button
                                                     className="btn  btn-dark custom btn-block"

@@ -25,7 +25,7 @@ function useSetOption(option, filter, dispatch) {
                 value: callback(data),
             });
         },
-        [option, callback, dispatch]
+        [option, callback, dispatch],
     );
 }
 
@@ -45,6 +45,7 @@ function ProductsView(props) {
         doHandleFetchCompareList,
         offcanvas,
         forAct,
+        storeData,
         customer,
         sidebarOpen,
     } = props;
@@ -276,18 +277,27 @@ function ProductsView(props) {
                                                 <div className="search__form">
                                                     <input
                                                         className="search__input"
+                                                        style={{ width: "300px", fontSize: "16px", fontWeight: "500" }}
                                                         value={searchKeyword}
                                                         onChange={(e) => setSearchKeyword(e.target.value)}
-                                                        placeholder="Cari produk..."
+                                                        placeholder={
+                                                            storeData
+                                                                ? `Cari produk di ${storeData.name}`
+                                                                : "Cari produk..."
+                                                        }
                                                         name="keyword"
                                                         aria-label="Site search"
                                                         type="text"
                                                         autoComplete="off"
                                                     />
                                                     <button
-                                                        className="search__button search__button--type--submit text-light"
                                                         type="submit"
                                                         onClick={handleSearch}
+                                                        style={{
+                                                            background: "#FF6221",
+                                                            color: "white",
+                                                            border: "none !important",
+                                                        }}
                                                     >
                                                         Cari
                                                         {/* <Search20Svg /> */}

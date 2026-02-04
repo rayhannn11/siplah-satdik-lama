@@ -616,7 +616,7 @@ const ShopPageCheckout = (props) => {
                             style={{ width: "50%", height: 60, marginRight: 10, fontSize: 14 }}
                             onClick={(val) =>
                                 doHandleChangeSelect(
-                                    { value: "bank_bpd_va", name: "Virtual Account BPD Jateng (BPDAja)" },
+                                    { value: "bank_bpd_va", name: "Kode Bayar (BPDAja)" },
                                     "paymentMethod",
                                 )
                             }

@@ -98,7 +98,7 @@ const Search = React.memo((props) => {
                 setHasSuggestions(false);
             }
         },
-        [customer?.token]
+        [customer?.token],
     );
     // const handleChangeQuery = (event) => {
     //     const query = event.target.value;
@@ -185,7 +185,7 @@ const Search = React.memo((props) => {
                         value={query}
                         className="search__input"
                         name="keyword"
-                        placeholder="Cari produk ..."
+                        placeholder="Cari produk search..."
                         aria-label="Site search"
                         type="text"
                         autoComplete="off"

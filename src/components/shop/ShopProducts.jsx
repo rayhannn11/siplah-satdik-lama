@@ -193,6 +193,7 @@ function ShopProducts(props) {
         viewMode,
         sidebarPosition,
         store,
+        storeData,
         forAct,
         doHandleChooseProduct,
         mainProduct,
@@ -261,6 +262,7 @@ function ShopProducts(props) {
     const productsView = (
         <ProductsView
             forAct={forAct}
+            storeData={storeData}
             doHandleChooseProduct={doHandleChooseProduct}
             isLoading={state.productsListIsLoading}
             productsList={state.productsList}

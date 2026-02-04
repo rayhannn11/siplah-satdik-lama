@@ -168,7 +168,7 @@ const Store = (props) => {
                 </div>
                 <ModalMallReviews storeId={store.id} toggle={setOpenReviews} isOpen={openReviews} />
             </div>
-            <ShopProducts forAct="store" />
+            <ShopProducts forAct="store" storeData={store} />
             {props.auth && isOpen && <ModalChat isOpen={isOpen} toggle={doOpenModal} store={store} />}
         </div>
     );
